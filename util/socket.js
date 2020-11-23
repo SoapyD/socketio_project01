@@ -39,9 +39,7 @@ exports.getPlayerNumber = (io, socket, namespace, roomName) => {
 
 exports.checkMessages = (io,namespace) => {
     io.of(namespace).on('connection', (socket, req)=> {
-		
-        socket.emit("messageFromServer",{text:"Connected to the "+namespace+" channel"})
-				
+
 		//JOIN THE PLAYER TO A ROOM
 		socket.on('joinRoom', (data) => {
 
@@ -56,54 +54,49 @@ exports.checkMessages = (io,namespace) => {
 			if(clients.length > 0)
 			{
 				if (clients.length < 2)
-				{
-					
+				{		
 					socket.join(roomName)
 					playerNumber = exports.getPlayerNumber(io, socket, namespace, roomName)
-					// deckController.addPlayer(roomName, data.userName, playerNumber);
 					joined_room = true;
 				}
 			}
 			else
 			{
-				//IF YOU'RE THE FIRST PERSON TO JOIN THE ROOM
-				// deckController.resetDecks(roomName);
-				
+				// RESET ROOM CODE GOES HERE, RESET HAPPENS WHEN FIRST PERSON ENTERS ROOM
 				socket.join(roomName)
 				playerNumber = exports.getPlayerNumber(io, socket, namespace, roomName)
-				// deckController.addPlayer(roomName, data.userName, playerNumber);
 				joined_room = true;				
 			}
 			
-            if (joined_room === true)
-            {                
+			if (joined_room === true)
+			{                
 				clients = exports.getClientsInRoom(io, namespace, roomName)
 				
-                data = {
-                    userName: data.userName
-                    ,roomName: roomName
-                    ,playerNumber: playerNumber
-                    ,usersNumber: clients.length
-                }
+				data = {
+					userName: data.userName
+					,roomName: roomName
+					,playerNumber: playerNumber
+					,usersNumber: clients.length
+				}
 				
-                //send room info back to socket
+        		//send room info back to socket
 				io.to(socket.id).emit('roomInfo', data);
+
 				//send user number info to all users
-                io.in(roomName).emit('checkStartButton', data);
-            }else{
+				if (clients.length >= 2){
+					io.in(roomName).emit('checkStart', data);
+				}
+			}else{
 				io.to(socket.id).emit('joinFailed', "Room Full");
 			}
-        })				
+		})				
 		
-		
-		//JOIN THE PLAYER TO A ROOM
-		// socket.on('startGameTrigger', (data) => {
-		// 	let roomName = data.roomName
-		// 	io.in(roomName).emit('startGame');
-		// })
+	
+
+        socket.emit("messageFromServer",{text:"Connected to the "+namespace+" channel"})
 
         socket.on('newMessageToServer', (message) => {
-            io.of(namespace).emit("newMessageFromServer",{text:message.text})
+			io.of(namespace).emit("newMessageFromServer",{text:message.text})
         })		
 
 		

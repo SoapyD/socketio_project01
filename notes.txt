@@ -1,0 +1,4 @@
+
+-when a player leaves the room:
+    -check to see if anyone is still in the room
+    -reassign player numbers

@@ -1,0 +1,26 @@
+
+.width-50-percent {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+}
+
+.btn {
+    width: 100%;
+}
+
+.left {
+	display: inline-block
+}
+
+.test {
+    float: left;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+#messages {
+    display: block;
+}
