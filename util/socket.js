@@ -82,10 +82,12 @@ exports.checkMessages = (io,namespace) => {
         		//send room info back to socket
 				io.to(socket.id).emit('roomInfo', data);
 
+				io.in(roomName).emit('roomMessage', data);
+
 				//send user number info to all users
-				if (clients.length >= 2){
-					io.in(roomName).emit('checkStart', data);
-				}
+				// if (clients.length >= 2){
+				// 	io.in(roomName).emit('checkStart', data);
+				// }
 			}else{
 				io.to(socket.id).emit('joinFailed', "Room Full");
 			}

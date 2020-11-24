@@ -32,16 +32,24 @@ connFunctions.checkMessages = (socket) => {
 
         const data = {
             roomName: document.querySelector('#roomName').value,
-            userName: document.querySelector('#userName').value                
+            userName: document.querySelector('#userName').value 
+            // userName: user.username               
         }
         socket.emit('joinRoom', data)
     })
 
-    socket.on('joined', (message) => {
-        console.log(message)
-    })
+    // socket.on('joined', (message) => {
+    //     console.log(message)
+    //     const messages = document.querySelector('#messages'); 
+    //     messages.insertAdjacentHTML("beforeend", "<li>'"+socket.id+"'</li>");	        
+    // })
 
-    socket.on('roomInfo', (data) => {
+    // socket.on('roomInfo', (data) => {
+    //     const messages = document.querySelector('#messages'); 
+    //     messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
+    // })
+
+    socket.on('roomMessage', (data) => {
         const messages = document.querySelector('#messages'); 
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
     })

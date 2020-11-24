@@ -1,11 +1,21 @@
+require('dotenv').config()
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
 const socketio = require('socket.io');
-const socketController = require('./util/socket');
+// const mongoose = require("mongoose");
+const LocalStrategy = require("passport-local");
+const passport = require("passport");
 
+//UTILS
+const socket = require('./util/socket');
+const database = require('./util/database');
+
+//MODELS
+const User = require("./models/user");
 
 
 // SETUP APP
@@ -16,13 +26,32 @@ app.use(methodOverride("_method")); //setup means of changing POST methods to DE
 app.use(flash()); //setup flash messages
 
 
-//routes
-// const 
-// 	IndexRoutes = require("./routes/index")	  
-// ;
+//SETUP SESSIONS
+app.use(require("express-session")({
+    secret: process.env.SESSION_SECRET, //used to encode and decode sessions
+    resave: false,
+    saveUninitialized: false
+    }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
-//setup routes
+//SETUP THE LOCAL VARIABLES
+app.use(function(req, res, next){
+	res.locals.user = req.user;
+	res.locals.error = req.flash("error");
+	res.locals.success = req.flash("success");	
+	next();
+})
+
+
+//setup user authentication and password serialization and deserialization
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+//SETUP ROUTES
 app.use(require("./routes/index"));
 
 
@@ -33,4 +62,4 @@ const expressServer = app.listen(3000, () => {
 })
 
 const io = socketio(expressServer);
-socketController.checkSockets(io);
+socket.checkSockets(io);

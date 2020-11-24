@@ -18,4 +18,49 @@
     <title>Title</title>
 </head>
 <body>
+
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">Brand</a>
+			</div>
 	
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	
+				<ul class="nav navbar-nav">
+					<% if(user) { %>
+						<% //if(user.role === 'admin') { %>
+							<li><a href="/create-room">Create Room</a></li>
+						<% //} %>
+					<% } %>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<% if(!user) { %>
+						<li><a href="/login">Login</a></li>
+						<li><a href="/register">Register</a></li>
+					<% } else { %>
+						<li><a href='/'>Signed In As <%= user.username %></a></li>
+						<li><a href="/logout">Logout</a></li>
+					<% } %>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		 </div><!-- /.container-fluid -->
+	</nav>	
+		
+
+	<div class="container">
+		<% if(error && error.length > 0) { %>
+			<div class="alert alert-danger" role="alert" id="errorMessage">
+				<%= error %>	
+			</div>	
+			<script type="text/javascript">window.setTimeout("document.getElementById('errorMessage').style.display='none';", 8000); </script>
+		<% } %>
+		<% if(success && success.length > 0) { %>	
+			<div class="alert alert-success" role="alert" id="successMessage">
+				<%= success %>	
+			</div>		
+			<script type="text/javascript">window.setTimeout("document.getElementById('successMessage').style.display='none';", 8000); </script>
+		<% } %>	
+	</div>	
