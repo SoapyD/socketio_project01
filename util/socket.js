@@ -1,6 +1,10 @@
 // const deckController = require('./deck');
 // const gameController = require('./game');
 
+const queriesUtil = require('../util/queries');
+const User = require("../models/user");
+const room = require('../models/room');
+
 // const exports = [];
 
 exports.getClientsInRoom = (io, namespace, roomName) => {
@@ -41,8 +45,33 @@ exports.checkMessages = (io,namespace) => {
     io.of(namespace).on('connection', (socket, req)=> {
 
 		//JOIN THE PLAYER TO A ROOM
-		socket.on('joinRoom', (data) => {
+		socket.on('createRoom', (data) => {
 
+			// CHECK TO SEE IF ROOM ALREADY EXISTS
+			queriesUtil.findRooms(data.roomName)
+			.then((rooms) => {
+				// console.log(rooms.length);
+
+				if (rooms.length > 0){
+					// IF ROOM NAME EXISTS, FAIL THE CREATION PROCESS
+					io.to(socket.id).emit('MessageFromServer', 'Creation failed, please choose another name');							
+				}else{
+					// ELSE, ALLOW THE ROOM TO BE CREATED
+					io.to(socket.id).emit('MessageFromServer', 'Creating room!');
+				}
+			})
+
+			let room_data = {
+				roomName: data.roomName,
+				userID: data.userID,
+				userName: data.userName
+			}
+			// queriesUtil.createRoom(room_data)
+			// .then((room) => {
+			// 	console.log(room);
+			// })
+
+			/*
 			let roomName = data.roomName
 			let playerNumber = 0
 			
@@ -84,22 +113,19 @@ exports.checkMessages = (io,namespace) => {
 
 				io.in(roomName).emit('roomMessage', data);
 
-				//send user number info to all users
-				// if (clients.length >= 2){
-				// 	io.in(roomName).emit('checkStart', data);
-				// }
 			}else{
 				io.to(socket.id).emit('joinFailed', "Room Full");
 			}
+			*/
 		})				
 		
 	
 
-        socket.emit("messageFromServer",{text:"Connected to the "+namespace+" channel"})
+        // socket.emit("messageFromServer",{text:"Connected to the "+namespace+" channel"})
 
-        socket.on('newMessageToServer', (message) => {
-			io.of(namespace).emit("newMessageFromServer",{text:message.text})
-        })		
+        // socket.on('newMessageToServer', (message) => {
+		// 	io.of(namespace).emit("newMessageFromServer",{text:message.text})
+        // })		
 
 		
 		socket.on('disconnect', () => {

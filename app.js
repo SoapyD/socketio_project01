@@ -11,8 +11,8 @@ const LocalStrategy = require("passport-local");
 const passport = require("passport");
 
 //UTILS
-const socket = require('./util/socket');
-const database = require('./util/database');
+const socketUtil = require('./util/socket');
+const databaseUtil = require('./util/database');
 
 //MODELS
 const User = require("./models/user");
@@ -62,4 +62,4 @@ const expressServer = app.listen(3000, () => {
 })
 
 const io = socketio(expressServer);
-socket.checkSockets(io);
+socketUtil.checkSockets(io);

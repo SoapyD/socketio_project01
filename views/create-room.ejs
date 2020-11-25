@@ -18,17 +18,19 @@
                 <input class="form-control" type="text" id="userName" value="<%= user.username %>" disabled>
             </div>				
 
-            <!-- <div class="form-group">
-                <p>Message:</p>
-                <input class="form-control" type="text" id='message'>
-            </div>					 -->
-            
-            <div class="form-group left width-50-percent">					
-                <input class="btn btn-primary" type="submit" value="Join Room"> 					
+            <div class="form-group">
+                <p>User ID:</p>
+                <input class="form-control" type="text" id="userID" value="<%= user.id %>" disabled>
+            </div>				
+
+
+
+            <div class="form-group left float-left width-50-percent">					
+                <input class="btn btn-primary" value="Create Room" id="create"> 					
             </div>
 
-            <div class="form-group left width-50-percent test">					
-                <input class="btn btn-primary hidden" type="submit" value="Start" id='start-button'> 					
+            <div class="form-group left float-left width-50-percent">					
+                <input class="btn btn-primary" value="Join Room" id="join"> 					
             </div>
 
         </form>

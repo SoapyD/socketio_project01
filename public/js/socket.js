@@ -5,6 +5,7 @@ const address = 'http://localhost:3000';
 // const address = 'http://localhost:3000/admin';
 const socket = io(address)
 
+
 const connFunctions = [];
 
 // connFunctions.joinRoom = (socket, data) => {
@@ -27,15 +28,25 @@ const connFunctions = [];
 
 connFunctions.checkMessages = (socket) => {
         
-    document.querySelector('#message-form').addEventListener('submit', (event) => {
+    // document.querySelector('#message-form').addEventListener('submit', (event) => {
+    $(document).on('click', '#create', (event) => {         
+
         event.preventDefault()
+        // if(event.preventDefault){ 
+        //     event.preventDefault()
+        // }
+        // else{
+        //     event.stop()
+        //     event.returnValue = false;
+        // };        
 
         const data = {
             roomName: document.querySelector('#roomName').value,
-            userName: document.querySelector('#userName').value 
+            userName: document.querySelector('#userName').value,
+            userID: document.querySelector('#userID').value 
             // userName: user.username               
         }
-        socket.emit('joinRoom', data)
+        socket.emit('createRoom', data)
     })
 
     // socket.on('joined', (message) => {
@@ -71,14 +82,14 @@ connFunctions.checkMessages = (socket) => {
 
 
 
-    socket.on('messageFromServer', (message) => {
-        console.log(message.text)
-        console.log(`my id is: ${socket.id}`)
-    })    
+    // socket.on('messageFromServer', (message) => {
+    //     console.log(message.text)
+    //     console.log(`my id is: ${socket.id}`)
+    // })    
 
-    socket.on('newMessageFromServer', (message) => {
+    socket.on('MessageFromServer', (message) => {
         const messages = document.querySelector('#messages'); 
-        messages.insertAdjacentHTML("beforeend", "<li>"+message.text+"</li>");
+        messages.insertAdjacentHTML("beforeend", "<li>"+message+"</li>");
     })
 
 
