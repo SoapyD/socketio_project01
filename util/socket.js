@@ -54,22 +54,88 @@ exports.checkMessages = (io,namespace) => {
 
 				if (rooms.length > 0){
 					// IF ROOM NAME EXISTS, FAIL THE CREATION PROCESS
-					io.to(socket.id).emit('MessageFromServer', 'Creation failed, please choose another name');							
+					let room = rooms[0];
+					if(room.users.indexOf(data.userID) > -1){
+						io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
+					}
+					else{
+						io.to(socket.id).emit('MessageFromServer', 'Creation failed, please choose another name');							
+					}
 				}else{
 					// ELSE, ALLOW THE ROOM TO BE CREATED
-					io.to(socket.id).emit('MessageFromServer', 'Creating room!');
+					io.to(socket.id).emit('MessageFromServer', 'Creating room.');
+
+					// let room_data = {
+					// 	roomName: data.roomName,
+					// 	password: data.password,						
+					// 	userID: data.userID,
+					// 	userName: data.userName
+					// }
+					queriesUtil.createRoom(data)
+					.then((room) => {
+						// console.log(room);
+						// io.to(socket.id).emit('roomInfo', data);
+						// io.in(roomName).emit('roomMessage', data);
+						
+						// io.to(socket.id).emit('MessageFromServer', 'Room Created!');
+
+						let return_data = {
+							userName: data.userName
+							,roomName: data.roomName
+							,playerNumber: room.users.indexOf(data.userID)
+						}
+						
+						//send room info back to socket
+						io.to(socket.id).emit('roomInfo', return_data);
+
+					})
+
+				}
+			})
+		})
+
+		//JOIN THE PLAYER TO A ROOM
+		socket.on('joinRoom', (data) => {
+
+			// CHECK TO SEE IF ROOM ALREADY EXISTS
+			queriesUtil.findRooms(data.roomName)
+			.then((rooms) => {
+				// console.log(rooms.length);
+
+				if (rooms.length > 0){
+					let room = rooms[0];
+
+					if(room.users.indexOf(data.userID) > -1){
+						io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
+					}
+					else{					
+						//ADD USER TO ROOM THEN RETURN DATA
+						room.users.push(data.userID);
+						room.save(function(err, room) {
+							let return_data = {
+								userName: data.userName
+								,roomName: data.roomName
+								,playerNumber: room.users.indexOf(data.userID)
+							}
+							//send room info back to socket
+							io.to(socket.id).emit('roomInfo', return_data);				
+						})
+					}
+				
+				}else{
+					// ELSE, ALLOW THE ROOM TO BE CREATED
+					io.to(socket.id).emit('MessageFromServer', "Join failed. Room Doesn't exist");
+
 				}
 			})
 
-			let room_data = {
-				roomName: data.roomName,
-				userID: data.userID,
-				userName: data.userName
-			}
-			// queriesUtil.createRoom(room_data)
-			// .then((room) => {
-			// 	console.log(room);
-			// })
+			socket.on('disconnect', () => {
+				console.log("user disconnected: "+socket.id);
+			})
+			
+		})    
+	})
+}
 
 			/*
 			let roomName = data.roomName
@@ -117,7 +183,7 @@ exports.checkMessages = (io,namespace) => {
 				io.to(socket.id).emit('joinFailed', "Room Full");
 			}
 			*/
-		})				
+				
 		
 	
 
@@ -128,12 +194,7 @@ exports.checkMessages = (io,namespace) => {
         // })		
 
 		
-		socket.on('disconnect', () => {
-			console.log("user disconnected: "+socket.id);
-		})
-		
-    })    
-}
+
 
 
 exports.checkSockets= (io) => {

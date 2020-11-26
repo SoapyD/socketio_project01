@@ -1,3 +1,4 @@
+const room = require("../models/room");
 const Room = require("../models/room");
 
 
@@ -18,15 +19,19 @@ exports.createRoom = (room_data) => {
     
     let users = [];
     users.push(room_data.userID);
-
-	return Room.create ({
-        roomName: room_data.roomName,
-        author: author,
-        users: users
-    }
-    
+        return Room.create ({
+            roomName: room_data.roomName,
+            password: room_data.password,
+            author: author,
+            users: users
+        }
     )
 }
+
+// exports.addRoomUser = async(room, userID) => {
+//     room.users.push(userID)
+//     await room.save()
+// }
 
 
 // exports.findRoom = (id) => {

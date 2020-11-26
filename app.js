@@ -13,6 +13,7 @@ const passport = require("passport");
 //UTILS
 const socketUtil = require('./util/socket');
 const databaseUtil = require('./util/database');
+const seedsUtil = require('./util/seeds');
 
 //MODELS
 const User = require("./models/user");
@@ -55,6 +56,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use(require("./routes/index"));
 
 
+seedsUtil.seedDB();
 
 const expressServer = app.listen(3000, () => {
 // const expressServer = app.listen(process.env.PORT, process.env.IP, function(){	

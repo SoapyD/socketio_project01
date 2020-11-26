@@ -42,12 +42,24 @@ connFunctions.checkMessages = (socket) => {
 
         const data = {
             roomName: document.querySelector('#roomName').value,
+            password: document.querySelector('#password').value,
             userName: document.querySelector('#userName').value,
-            userID: document.querySelector('#userID').value 
-            // userName: user.username               
+            userID: document.querySelector('#userID').value               
         }
         socket.emit('createRoom', data)
     })
+
+    $(document).on('click', '#join', (event) => {         
+
+        event.preventDefault()
+        const data = {
+            roomName: document.querySelector('#roomName').value,
+            password: document.querySelector('#password').value,
+            userName: document.querySelector('#userName').value,
+            userID: document.querySelector('#userID').value               
+        }
+        socket.emit('joinRoom', data)
+    })    
 
     // socket.on('joined', (message) => {
     //     console.log(message)
@@ -55,10 +67,10 @@ connFunctions.checkMessages = (socket) => {
     //     messages.insertAdjacentHTML("beforeend", "<li>'"+socket.id+"'</li>");	        
     // })
 
-    // socket.on('roomInfo', (data) => {
-    //     const messages = document.querySelector('#messages'); 
-    //     messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
-    // })
+    socket.on('roomInfo', (data) => {
+        const messages = document.querySelector('#messages'); 
+        messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
+    })
 
     socket.on('roomMessage', (data) => {
         const messages = document.querySelector('#messages'); 
