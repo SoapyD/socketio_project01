@@ -84,7 +84,7 @@ exports.checkMessages = (io,namespace) => {
 							,roomName: data.roomName
 							,playerNumber: room.users.indexOf(data.userID)
 						}
-						
+						socket.join(data.roomName)
 						//send room info back to socket
 						io.to(socket.id).emit('roomInfo', return_data);
 
@@ -120,6 +120,7 @@ exports.checkMessages = (io,namespace) => {
 							//send room info back to socket
 							io.to(socket.id).emit('roomInfo', return_data);				
 						})
+						socket.join(data.roomName)
 					}
 				
 				}else{
@@ -128,12 +129,15 @@ exports.checkMessages = (io,namespace) => {
 
 				}
 			})
-
-			socket.on('disconnect', () => {
-				console.log("user disconnected: "+socket.id);
-			})
-			
 		})    
+
+		socket.on('MessageToServer', (data) => {
+			io.in(data.roomName).emit("MessageFromServer",data.text)
+		})	
+
+		socket.on('disconnect', () => {
+			console.log("user disconnected: "+socket.id);
+		})		
 	})
 }
 

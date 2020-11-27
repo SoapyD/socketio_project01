@@ -5,6 +5,10 @@
     padding: 0;
 }
 
+.no-margin {
+    margin: 0
+}
+
 .btn {
     width: 100%;
 }
@@ -23,4 +27,29 @@
 
 #messages {
     display: block;
+}
+
+#fname {
+    width: 100%;
+}
+
+.sidebar {
+    border: 1px black dotted;
+    height: 85vh;
+    padding: 0;
+}
+
+#messages {
+    margin: 5px 20px;
+    padding: 0;
+}
+
+#message-input {
+    position: absolute;
+    bottom: 0;    
+    width: 100%;
+}
+
+.width-100 {
+    width: 100%;
 }

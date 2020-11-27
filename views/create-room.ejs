@@ -3,49 +3,71 @@
 	<!-- <h1 style="text-align:center;">
     Join Room
 </h1> -->
+<div class="container">
 
-<div class="row">
-    
-    <div style="width:30%; margin:30px auto; ">			
-        <form id="message-form">
-            <div class="form-group">
-                <p>Room Name:</p>
-                <input class="form-control" type="text" id="roomName">
-            </div>
-            
-            <div class="form-group">
-                <p>Password:</p>
-                <input class="form-control" type="text" id="password">
-            </div>
-
-            <div class="form-group">
-                <!-- <p>User Name:</p> -->
-                <input class="form-control" type="hidden" id="userName" value="<%= user.username %>" disabled>
-            </div>				
-
-            <div class="form-group">
-                <!-- <p>User ID:</p> -->
-                <input class="form-control" type="hidden" id="userID" value="<%= user.id %>" disabled>
-            </div>				
-
-
-
-            <div class="form-group left float-left width-50-percent">					
-                <input class="btn btn-primary" value="Create Room" id="create"> 					
-            </div>
-
-            <div class="form-group left float-left width-50-percent">					
-                <input class="btn btn-primary" value="Join Room" id="join"> 					
-            </div>
-
-        </form>
-
-        <ul id="messages">
-
-        </ul>  			
+    <div class="row">
         
-    </div>
+        <div class="col-xs-9">
     
+        </div>
+    
+        <div class="col-xs-3 sidebar">
+    
+            <!-- <div style="width:30%; margin:30px auto; ">			 -->
+                <form id="message-form">
+                    <div class="form-group">
+                        <p>Room Name:</p>
+                        <input class="form-control" type="text" id="roomName">
+                    </div>
+                    
+                    <div class="form-group">
+                        <p>Password:</p>
+                        <input class="form-control" type="text" id="password">
+                    </div>
+        
+                    <div class="form-group">
+                        <!-- <p>User Name:</p> -->
+                        <input class="form-control" type="hidden" id="userName" value="<%= user.username %>" disabled>
+                    </div>				
+        
+                    <div class="form-group">
+                        <!-- <p>User ID:</p> -->
+                        <input class="form-control" type="hidden" id="userID" value="<%= user.id %>" disabled>
+                    </div>				
+        
+        
+        
+                    <div class="form-group left float-left width-50-percent">					
+                        <input class="btn btn-primary" value="Create Room" id="create"> 					
+                    </div>
+        
+                    <div class="form-group left float-left width-50-percent">					
+                        <input class="btn btn-primary" value="Join Room" id="join"> 					
+                    </div>
+        
+                </form>
+        
+                <ul id="messages">
+        
+                </ul>  			
+                
+                <div class="">
+                    <form id="message-input">
+                        <div class="form-group no-margin">
+                            <input type="text" id="fname" name="fname">
+                        </div>
+            
+                        <div class="form-group no-margin">					
+                            <input class="btn btn-primary" id="submit-message" value="Message"> 					
+                        </div>
+            
+                    </form>
+                </div>
+
+            <!-- </div> -->
+        </div>
+
+    </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

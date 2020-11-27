@@ -5,6 +5,7 @@ const address = 'http://localhost:3000';
 // const address = 'http://localhost:3000/admin';
 const socket = io(address)
 
+$('#message-input').slideUp(0);
 
 const connFunctions = [];
 
@@ -61,6 +62,17 @@ connFunctions.checkMessages = (socket) => {
         socket.emit('joinRoom', data)
     })    
 
+    $(document).on('click', '#submit-message', (event) => {         
+
+        event.preventDefault()
+        let data = {
+            roomName: document.querySelector('#roomName').value,
+            text: document.querySelector('#fname').value
+        }
+        // console.log("TEST")
+        socket.emit('MessageToServer', data)
+    })   
+
     // socket.on('joined', (message) => {
     //     console.log(message)
     //     const messages = document.querySelector('#messages'); 
@@ -70,6 +82,8 @@ connFunctions.checkMessages = (socket) => {
     socket.on('roomInfo', (data) => {
         const messages = document.querySelector('#messages'); 
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
+        $('#message-form').slideToggle(1000);
+        $('#message-input').slideDown(1000);
     })
 
     socket.on('roomMessage', (data) => {
