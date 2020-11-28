@@ -1,43 +1,41 @@
 // const deckController = require('./deck');
 // const gameController = require('./game');
 
+const functionsUtil = require('../util/functions');
 const queriesUtil = require('../util/queries');
 const User = require("../models/user");
 const room = require('../models/room');
 
 // const exports = [];
 
-exports.getClientsInRoom = (io, namespace, roomName) => {
+// exports.getClientsInRoom = (io, namespace, roomName) => {
 	
-	var clients = []
+// 	var clients = []
 	
-	if(io.sockets.adapter.rooms[roomName])
-	{
-		var clients = io.nsps[namespace].adapter.rooms[roomName];
-		// totalUsers = clients.length;
-	}
-	// console.log(clients)
-	return clients;
-}
+// 	if(io.sockets.adapter.rooms[roomName])
+// 	{
+// 		var clients = io.nsps[namespace].adapter.rooms[roomName];
+// 	}
+// 	return clients;
+// }
 
-exports.getPlayerNumber = (io, socket, namespace, roomName) => {
-	//GET THE CLIENT LIST TO SEE IF THIS IS THE FIRST PLAYER IN THE ROOM
-	let clients = exports.getClientsInRoom(io, namespace, roomName)
+// exports.getPlayerNumber = (io, socket, namespace, roomName) => {
+// 	//GET THE CLIENT LIST TO SEE IF THIS IS THE FIRST PLAYER IN THE ROOM
+// 	let clients = exports.getClientsInRoom(io, namespace, roomName)
 
-	const keys = Object.keys(clients.sockets);
+// 	const keys = Object.keys(clients.sockets);
 	
-	let playerNumber = 0;
+// 	let playerNumber = 0;
 	
-	for (let [i, key] of keys.entries())
-	{
-		if (socket.id === key)
-		{
-			playerNumber = i + 1;
-		}
-	}
-	
-	return playerNumber;
-}
+// 	for (let [i, key] of keys.entries())
+// 	{
+// 		if (socket.id === key)
+// 		{
+// 			playerNumber = i + 1;
+// 		}
+// 	}
+// 	return playerNumber;
+// }
 
 
 
@@ -56,7 +54,11 @@ exports.checkMessages = (io,namespace) => {
 					// IF ROOM NAME EXISTS, FAIL THE CREATION PROCESS
 					let room = rooms[0];
 					if(room.users.indexOf(data.userID) > -1){
-						io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
+						if(room.sockets.indexOf(socket.id) > -1){
+							io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
+						}else{
+							io.to(socket.id).emit('MessageFromServer', "Room already exists, please use join button to rejoin it");								
+						}
 					}
 					else{
 						io.to(socket.id).emit('MessageFromServer', 'Creation failed, please choose another name');							
@@ -65,13 +67,7 @@ exports.checkMessages = (io,namespace) => {
 					// ELSE, ALLOW THE ROOM TO BE CREATED
 					io.to(socket.id).emit('MessageFromServer', 'Creating room.');
 
-					// let room_data = {
-					// 	roomName: data.roomName,
-					// 	password: data.password,						
-					// 	userID: data.userID,
-					// 	userName: data.userName
-					// }
-					queriesUtil.createRoom(data)
+					queriesUtil.createRoom(data, socket.id)
 					.then((room) => {
 						// console.log(room);
 						// io.to(socket.id).emit('roomInfo', data);
@@ -106,11 +102,29 @@ exports.checkMessages = (io,namespace) => {
 					let room = rooms[0];
 
 					if(room.users.indexOf(data.userID) > -1){
-						io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
+						if(room.sockets.indexOf(socket.id) > -1){
+							io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
+						}else{
+							io.to(socket.id).emit('MessageFromServer', "Rejoining room");														
+							room.sockets.push(socket.id);
+
+							room.save(function(err, room) {
+								let return_data = {
+									userName: data.userName
+									,roomName: data.roomName
+									,playerNumber: room.users.indexOf(data.userID)
+								}
+								//send room info back to socket
+								io.to(socket.id).emit('roomInfo', return_data);				
+							})
+							socket.join(data.roomName)							
+						}
 					}
 					else{					
 						//ADD USER TO ROOM THEN RETURN DATA
 						room.users.push(data.userID);
+						room.sockets.push(socket.id);
+
 						room.save(function(err, room) {
 							let return_data = {
 								userName: data.userName
@@ -136,7 +150,18 @@ exports.checkMessages = (io,namespace) => {
 		})	
 
 		socket.on('disconnect', () => {
-			console.log("user disconnected: "+socket.id);
+
+			queriesUtil.findRoomsWithSocket(socket.id)
+			.then((rooms) => {
+				if (rooms.length > 0){
+					let room = rooms[0];
+					let sockets = rooms[0].sockets; 			
+					sockets = functionsUtil.removeFromArray(sockets, socket.id)
+					room.sockets = sockets;
+					room.save();
+					console.log("user disconnected: "+socket.id);
+				}
+			});
 		})		
 	})
 }

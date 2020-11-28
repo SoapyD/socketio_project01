@@ -62,6 +62,6 @@ exports.logoutUser = (req,res) => {
 }
 
 
-exports.createRoom = (req,res) => {
-	res.render("create-room");		
+exports.getRoom = (req,res) => {
+	res.render("room");		
 }

@@ -62,16 +62,32 @@ connFunctions.checkMessages = (socket) => {
         socket.emit('joinRoom', data)
     })    
 
-    $(document).on('click', '#submit-message', (event) => {         
-
+    function sendMessage(event){
         event.preventDefault()
         let data = {
             roomName: document.querySelector('#roomName').value,
             text: document.querySelector('#fname').value
         }
+        //CLEAR TEXT
+        document.querySelector('#fname').value = "";
         // console.log("TEST")
-        socket.emit('MessageToServer', data)
+        socket.emit('MessageToServer', data)        
+    }
+
+    $(document).on('click', '#submit-message', (event) => {
+        sendMessage(event)         
     })   
+
+    $(document).on('keypress', (event) => {
+        if(event.which == 13) {
+            console.log("test")
+            sendMessage(event) 
+        }
+    });
+
+    // $('#submit-message').bind("enterKey",(event => ){
+    //     sendMessage(event)
+    //  });
 
     // socket.on('joined', (message) => {
     //     console.log(message)

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const roomSchema = new mongoose.Schema({
 	roomName: String,
 	password: String,
+	sockets: [String],
     users: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User' 

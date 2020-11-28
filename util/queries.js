@@ -10,7 +10,11 @@ exports.findRooms = (roomName) => {
     return Room.find({roomName: roomName})
 }
 
-exports.createRoom = (room_data) => {
+exports.findRoomsWithSocket = (socket_id) => {
+    return Room.find({sockets: socket_id})
+}
+
+exports.createRoom = (room_data, socket_id) => {
 
     let author = {
 		id: room_data.userID,
@@ -19,11 +23,16 @@ exports.createRoom = (room_data) => {
     
     let users = [];
     users.push(room_data.userID);
+
+    let sockets = [];
+    sockets.push(socket_id);
+
         return Room.create ({
             roomName: room_data.roomName,
             password: room_data.password,
             author: author,
-            users: users
+            users: users,
+            sockets: sockets
         }
     )
 }

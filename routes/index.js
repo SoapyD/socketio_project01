@@ -19,7 +19,7 @@ router.post("/login", adminController.loginUser)
 
 router.get("/logout", adminController.logoutUser)
 
-router.get("/create-room", middleware.isLoggedIn, adminController.createRoom)
+router.get("/room", middleware.isLoggedIn, adminController.getRoom)
 
 
 
