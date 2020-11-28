@@ -1,4 +1,15 @@
 
+-Add in step to the socket util that checks for reconnections and automatically tries to rejoin room
+-Maybe have it that if the author gets kicked out of the room, everyone is kicked out too?
+
+ROOM PROCESS
+//////////////////////////////////////////////////////////////////////
+-when a player attempts to create a room:
+    -Check to see if the room exists already
+        -If the room belongs to the user
+            -if the users socket belongs to the room, say they're already in it
+            -else, say the room exists, the user just needs to rejoin room
+        -Else send message to say "room name in use, choose another"
+
 -when a player leaves the room:
-    -check to see if anyone is still in the room
-    -reassign player numbers
+    -Remove them from the socket list
