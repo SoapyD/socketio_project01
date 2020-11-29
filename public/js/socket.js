@@ -138,6 +138,21 @@ connFunctions.checkMessages = (socket) => {
 
 }        
 
-
 connFunctions.checkMessages(socket)
 
+
+// GAME OBJECT METHODS
+
+connFunctions.updateGameElements = () => {
+	socket.on('MoveScrollbar', (data) => {
+		gameFunctions.scrollBar.x = data.x
+	})	
+}
+
+
+connFunctions.requestMoveScrollbar = (params, data) => {
+	if (gameFunctions.playerNumber === gameFunctions.currentPlayer)
+	{	
+    	socket.emit('requestMoveScrollbar', data)
+	}
+}

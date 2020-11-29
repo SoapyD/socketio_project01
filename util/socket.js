@@ -163,6 +163,59 @@ exports.checkMessages = (io,namespace) => {
 				}
 			});
 		})		
+
+
+
+		// socket.on('requestCreateCard', (data) => {
+		// 	let card_number = deckController.drawCard(data.roomName, data.deck_id);
+		// 	data.card_number = card_number;
+		// 	io.of(namespace).emit("CreateCard", data)
+		// })	
+
+		// socket.on('requestMoveCard', (data) => {
+		// 	io.of(namespace).emit("MoveCard", data)
+		// })	
+
+		// socket.on('requestRotateCard', (data) => {
+		// 	io.of(namespace).emit("RotateCard",data)
+		// })			
+
+		// socket.on('requestSizeCard', (data) => {
+		// 	io.of(namespace).emit("SizeCard",data)
+		// })					
+		
+		// socket.on('requestGridSnapCard', (data) => {
+		// 	io.of(namespace).emit("GridSnapCard",data)
+		// })							
+		
+		// socket.on('requestPalmCard', (data) => {
+		// 	io.of(namespace).emit("PalmCard",data)
+		// })		
+		
+		// socket.on('requestLockCard', (data) => {
+		// 	io.of(namespace).emit("LockCard",data)
+		// })									
+		
+		socket.on('requestMoveScrollbar', (data) => {
+			io.of(namespace).emit("MoveScrollbar", data)
+		})											
+		
+		// socket.on('requestChangePlayer', () => {
+		// 	io.of(namespace).emit("ChangePlayer")
+		// })			
+
+		// socket.on('requestCheckBoard', (data) => {
+		// 	if(data.touching === 1){ // && data.pass_check === true
+		// 		deckController.checkBoardMatrix(data);
+		// 	}
+		// 	if(data.pass_check === true){
+		// 		deckController.updateBoardMatrix(data);
+		// 	}
+			
+		// 	io.of(namespace).emit('resolveCheckBoard', data);			
+		// })			
+		
+
 	})
 }
 
@@ -222,6 +275,8 @@ exports.checkMessages = (io,namespace) => {
 		// 	io.of(namespace).emit("newMessageFromServer",{text:message.text})
         // })		
 
+
+		
 		
 
 
