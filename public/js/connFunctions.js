@@ -100,6 +100,7 @@ connFunctions.checkMessages = (socket) => {
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
         $('#message-form').slideToggle(1000);
         $('#message-input').slideDown(1000);
+        gameFunctions.config.game_state += 1;
     })
 
     socket.on('roomMessage', (data) => {

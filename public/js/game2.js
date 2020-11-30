@@ -50,10 +50,35 @@ function create ()
 		gameFunctions.config.cardSize, 
 		gameFunctions.config.cardSize, 
 		0x00b9f2).setAltFillStyle(0x016fce).setOutlineStyle(0x000000);
+
+
+		//Create a camera controller using the arraow keys
+		var cursors = this.input.keyboard.createCursorKeys();
+
+		var controlConfig = {
+			camera: this.cameras.main,
+			left: cursors.left,
+			right: cursors.right,
+			up: cursors.up,
+			down: cursors.down,
+			acceleration: 0.04,
+			drag: 0.0005,
+			maxSpeed: 0.7
+		};
+	
+		controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+	
+		this.cameras.main.setBounds(
+			-gameFunctions.config.cardSize, 
+			-gameFunctions.config.cardSize, 
+			config.width + (gameFunctions.config.cardSize * 2), 
+			config.height + (gameFunctions.config.cardSize * 2));
+
 }
 
-function update ()
+function update (time, delta)
 {
+	controls.update(delta);
 	// console.log("loop")
 	switch( gameFunctions.config.game_state) {
 		case 0:

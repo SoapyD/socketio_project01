@@ -2,9 +2,9 @@
 gameFunctions = []
 
 gameFunctions.config = {
-    cardSize: 50,
+    cardSize: 100,
     handCardSize: 150,
-    largeCardSize: 250,
+    largeCardSize: 200,
     tableWidth: 7, //7
     tableHeight: 5, //5
     card_back: 15,	
@@ -29,7 +29,7 @@ gameFunctions.config = {
 
 gameFunctions.createScrollBar = () => {
 	
-	let cardNumber = 6;
+	let cardNumber = 12;
 	gameFunctions.config.yPosUp = gameFunctions.game.cameras.main.centerY + (config.height / 2) - (gameFunctions.config.handCardSize / 2);
 	gameFunctions.config.yPosDown = gameFunctions.game.cameras.main.centerY + (config.height / 2);// + (gameFunctions.config.handCardSize / 4);	
 	
