@@ -3,7 +3,9 @@
 var config = {
     type: Phaser.AUTO,
     width: 800,
-    height: 600,
+	height: 600,
+	// width: window.innerWidth,
+	// height: window.innerHeight,	
     physics: {
         default: 'arcade',
         arcade: {
@@ -16,7 +18,7 @@ var config = {
     },
     scale: {
         parent: 'gameContainer',  
-        // mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.FIT,
         // autoCenter: Phaser.Scale.AUTO,
       },
       scene: {
@@ -30,7 +32,28 @@ var game = new Phaser.Game(config);
 
 function preload ()
 {
+	// this.load.image('card', './img/card.png');
+	
+	this.load.spritesheet("a2", "./img/cards/a2.png", 
+	 { frameWidth: 350, frameHeight: 350, endFrame: 16 });	
 
+	this.load.spritesheet("s2", "./img/cards/s2.png", 
+	 { frameWidth: 350, frameHeight: 350, endFrame: 16 });		
+
+	this.load.spritesheet("p2", "./img/cards/p2.png", 
+	 { frameWidth: 350, frameHeight: 350, endFrame: 16 });		
+
+	this.load.spritesheet("f2", "./img/cards/f2.png", 
+	 { frameWidth: 350, frameHeight: 350, endFrame: 16 });		
+	
+	this.load.spritesheet("c2", "./img/cards/c2.png", 
+	 { frameWidth: 350, frameHeight: 350, endFrame: 16 });	
+	
+	
+	// this.load.html('nameform', 'setup2.html');
+	
+	this.load.spritesheet("buttons", "./img/buttons3.jpg", 
+	 { frameWidth: 100, frameHeight: 50, endFrame: 3 });	
 }
 
 var element;
@@ -94,74 +117,28 @@ function update (time, delta)
 		
 		case 2:
             this.input.dragDistanceThreshold = 16;			
-            /*
-            let callbackParams = {};
-			gameFunctions.createButton(this, 50, this.cameras.main.centerY - 25, "lock card", connFunctions.requestLockCard, callbackParams, gameFunctions.btn_sprite);			
-			gameFunctions.createButton(this, 50, this.cameras.main.centerY + 25, "end turn", connFunctions.requestChangePlayer, callbackParams, gameFunctions.btn_sprite);
-            
 			
-			let far_left = gameFunctions.tableWidth * gameFunctions.cardSize;
-			
-			callbackParams = {
-				roomName: gameFunctions.roomName,
-				deck_id: 0,
-				card_type: "a2"	
-			}
-            gameFunctions.createButton(this, far_left- 50, this.cameras.main.centerY - 100, "armour", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
-			
-			callbackParams = {
-				roomName: gameFunctions.roomName,				
-				deck_id: 1,
-				card_type: "s2"	
-			}			
-            gameFunctions.createButton(this, far_left- 50, this.cameras.main.centerY - 50, "speed", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
-            
-			callbackParams = {
-				roomName: gameFunctions.roomName,				
-				deck_id: 2,
-				card_type: "p2"	
-			}			
-			gameFunctions.createButton(this, far_left- 50, this.cameras.main.centerY, "physical", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
-            
-			callbackParams = {
-				roomName: gameFunctions.roomName,				
-				deck_id: 3,
-				card_type: "f2"	
-			}			
-			gameFunctions.createButton(this, far_left- 50, this.cameras.main.centerY + 50, "focus", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
-            
-			callbackParams = {
-				roomName: gameFunctions.roomName,				
-				deck_id: 4,
-				card_type: "c2"	
-			}			
-			gameFunctions.createButton(this, far_left- 50, this.cameras.main.centerY + 100, "cheat", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
-			
-			gameFunctions.btn_sprite.forEach(btn => {
-				gameFunctions.buttonPress(btn, btn.clickAction, btn.callbackParams);                    
-			})			
-			
-			gameFunctions.setupPlayers();
-			*/
+			// gameFunctions.setupPlayers();
+			/**/
+			gameFunctions.setupButtons();
 			connFunctions.updateGameElements();			
 			gameFunctions.createScrollBar();			
 			// console.log("TEST")
 			gameFunctions.config.game_state += 1;
 		break;
-		/*
 		case 3:
-            //SETUP GAME LOOP
+			//SETUP GAME LOOP
             gameFunctions.hand = []; //RESET THE HAND
-            gameFunctions.selected_card = -1;
+            gameFunctions.config.selected_card = -1;
             
             if(gameFunctions.cards)
             {
                 gameFunctions.cards.forEach((card, i) => {
                     if (card.locked === false)
                     {
-                        if (gameFunctions.currentPlayer === card.owner)
+                        if (gameFunctions.config.currentPlayer === card.owner)
                         {		   
-                            card.setActive(true);
+							card.setActive(true);
                             card.setVisible(true);    
                             
                             gameFunctions.hand.push(card.id)
@@ -174,14 +151,13 @@ function update (time, delta)
                     }
                 })	
             }
-			gameFunctions.game_state += 1;						
+			gameFunctions.config.game_state += 1;						
 		break;        
 		case 4:
 			gameFunctions.updateHandCards();
 			
 			gameFunctions.updateCardGraphics();
-			break;			
-			*/
+		break;			
 		default:
 		// code block
 	}	

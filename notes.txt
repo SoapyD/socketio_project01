@@ -2,6 +2,10 @@
 -Add in step to the socket util that checks for reconnections and automatically tries to rejoin room
 -Maybe have it that if the author gets kicked out of the room, everyone is kicked out too?
 
+
+-Add tween for cards changing sizes
+-Add tween for card going back into the hand bar
+
 ROOM PROCESS
 //////////////////////////////////////////////////////////////////////
 -when a player attempts to create a room:

@@ -25,7 +25,19 @@ gameFunctions.config = {
     yPosUp: -1
 }
 
+gameFunctions.hand = [];
+gameFunctions.cards = [];	
+gameFunctions.btn_sprite = [];
+gameFunctions.print_sprite = [];
 
+
+//  #####   #####  ######  ####### #       #       ######     #    ######  
+// #     # #     # #     # #     # #       #       #     #   # #   #     # 
+// #       #       #     # #     # #       #       #     #  #   #  #     # 
+//  #####  #       ######  #     # #       #       ######  #     # ######  
+//       # #       #   #   #     # #       #       #     # ####### #   #   
+// #     # #     # #    #  #     # #       #       #     # #     # #    #  
+//  #####   #####  #     # ####### ####### ####### ######  #     # #     # 
 
 gameFunctions.createScrollBar = () => {
 	
@@ -98,4 +110,122 @@ gameFunctions.createScrollBar = () => {
 	})			
 	
 	gameFunctions.scrollBar = scrollBar;
+}
+
+
+
+// ######  #     # ####### ####### ####### #     # 
+// #     # #     #    #       #    #     # ##    # 
+// #     # #     #    #       #    #     # # #   # 
+// ######  #     #    #       #    #     # #  #  # 
+// #     # #     #    #       #    #     # #   # # 
+// #     # #     #    #       #    #     # #    ## 
+// ######   #####     #       #    ####### #     # 
+
+gameFunctions.createButton = (game, x, y, label, clickAction, callbackParams, array) => {
+    const btn = game.add.sprite(x, y, "buttons").setInteractive()
+    var style = { font: "18px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: btn.width, align: "center" }; //, backgroundColor: "#ffff00"
+
+    btn.click = false
+    btn.clickAction = clickAction;
+    btn.callbackParams = callbackParams;
+
+    btn.text = game.add.text(0, 0, label, style);
+    btn.text.x = btn.x - (btn.text.width / 2)
+    btn.text.y = btn.y	- (btn.text.height / 2)	
+	btn.text.setScrollFactor(0); //make buttons non-scrollable
+	
+	btn.depth = 100;
+	btn.text.depth = 110;
+	btn.setScrollFactor(0); //make buttons non-scrollable
+	
+    array.push(btn);	
+
+    return btn
+}
+
+gameFunctions.buttonPress = (sprite, callback, callbackParams) => {
+	sprite.on('pointerover', function (event) {
+		this.setFrame(1);
+	});			
+	sprite.on('pointerout', function (event) {
+		this.setFrame(0)
+	});						
+
+    //PRESSING THE MOUSE BUTTON
+	sprite.on('pointerup', function (event) {
+		this.setFrame(1)
+		//NEED TO SET THIS AS A SOCKET MESSAGE
+		if (sprite.click === false){
+			sprite.click = true;
+			callback(callbackParams);
+		}
+    })			
+    
+    //RELEASING THE MOUSE BUTTON    
+	sprite.on('pointerdown', function (event) {
+		this.setFrame(2)
+		if (sprite.click === true){
+			sprite.click = false;
+		}
+	})			
+}
+
+
+//  #####  ####### ####### #     # ######        ######  #     # ####### ####### ####### #     #  #####  
+// #     # #          #    #     # #     #       #     # #     #    #       #    #     # ##    # #     # 
+// #       #          #    #     # #     #       #     # #     #    #       #    #     # # #   # #       
+//  #####  #####      #    #     # ######  ##### ######  #     #    #       #    #     # #  #  #  #####  
+//       # #          #    #     # #             #     # #     #    #       #    #     # #   # #       # 
+// #     # #          #    #     # #             #     # #     #    #       #    #     # #    ## #     # 
+//  #####  #######    #     #####  #             ######   #####     #       #    ####### #     #  ##### 
+
+gameFunctions.setupButtons = () => {
+
+	let callbackParams = {};
+	gameFunctions.createButton(gameFunctions.game, 50, gameFunctions.game.cameras.main.centerY - 25, "lock card", connFunctions.requestLockCard, callbackParams, gameFunctions.btn_sprite);			
+	gameFunctions.createButton(gameFunctions.game, 50, gameFunctions.game.cameras.main.centerY + 25, "end turn", connFunctions.requestChangePlayer, callbackParams, gameFunctions.btn_sprite);
+	
+	
+	// let far_left = gameFunctions.tableWidth * gameFunctions.cardSize;
+	let far_right = config.width
+	
+	callbackParams = {
+		roomName: gameFunctions.config.roomName,
+		deck_id: 0,
+		card_type: "a2"	
+	}
+	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY - 100, "armour", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
+	
+	callbackParams = {
+		roomName: gameFunctions.config.roomName,				
+		deck_id: 1,
+		card_type: "s2"	
+	}			
+	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY - 50, "speed", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
+	
+	callbackParams = {
+		roomName: gameFunctions.config.roomName,				
+		deck_id: 2,
+		card_type: "p2"	
+	}			
+	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY, "physical", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
+	
+	callbackParams = {
+		roomName: gameFunctions.config.roomName,				
+		deck_id: 3,
+		card_type: "f2"	
+	}			
+	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY + 50, "focus", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
+	
+	callbackParams = {
+		roomName: gameFunctions.config.roomName,				
+		deck_id: 4,
+		card_type: "c2"	
+	}			
+	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY + 100, "cheat", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
+	
+	gameFunctions.btn_sprite.forEach(btn => {
+		gameFunctions.buttonPress(btn, btn.clickAction, btn.callbackParams);                    
+	})				
 }

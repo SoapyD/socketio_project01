@@ -9,22 +9,14 @@ $('#message-input').slideUp(0);
 
 const connFunctions = [];
 
-// connFunctions.joinRoom = (socket, data) => {
 
-//     socket.emit('joinRoom', data)	
-
-//     socket.on('roomInfo', (data) => {
-// 		gameFunctions.playerNumber = data.playerNumber
-//         gameFunctions.roomName = data.roomName
-// 		gameFunctions.userName = data.userName
-// 		gameFunctions.usersNumber = data.usersNumber
-
-
-// 		const messages = document.querySelector('#messages'); 
-//         messages.insertAdjacentHTML("beforeend", "<li>'"+gameFunctions.userName+"' has been added as Player #"+gameFunctions.playerNumber+" to room '"+gameFunctions.roomName+"'</li>");		
-        
-//     })		
-// }    
+//    #    ######  #     # ### #     # 
+//   # #   #     # ##   ##  #  ##    # 
+//  #   #  #     # # # # #  #  # #   # 
+// #     # #     # #  #  #  #  #  #  # 
+// ####### #     # #     #  #  #   # # 
+// #     # #     # #     #  #  #    ## 
+// #     # ######  #     # ### #     # 
 
 
 connFunctions.checkMessages = (socket) => {
@@ -32,14 +24,7 @@ connFunctions.checkMessages = (socket) => {
     // document.querySelector('#message-form').addEventListener('submit', (event) => {
     $(document).on('click', '#create', (event) => {         
 
-        event.preventDefault()
-        // if(event.preventDefault){ 
-        //     event.preventDefault()
-        // }
-        // else{
-        //     event.stop()
-        //     event.returnValue = false;
-        // };        
+        event.preventDefault() 
 
         const data = {
             roomName: document.querySelector('#roomName').value,
@@ -85,16 +70,6 @@ connFunctions.checkMessages = (socket) => {
         }
     });
 
-    // $('#submit-message').bind("enterKey",(event => ){
-    //     sendMessage(event)
-    //  });
-
-    // socket.on('joined', (message) => {
-    //     console.log(message)
-    //     const messages = document.querySelector('#messages'); 
-    //     messages.insertAdjacentHTML("beforeend", "<li>'"+socket.id+"'</li>");	        
-    // })
-
     socket.on('roomInfo', (data) => {
         const messages = document.querySelector('#messages'); 
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
@@ -112,8 +87,6 @@ connFunctions.checkMessages = (socket) => {
         
         if(data.usersNumber === 1)
         {
-            // const start_btn = document.querySelector('#start-button');
-            // start_btn.to
             $('#start-button').removeClass('hidden');
         }	
     })	
@@ -124,25 +97,32 @@ connFunctions.checkMessages = (socket) => {
     })	
 
 
-
-    // socket.on('messageFromServer', (message) => {
-    //     console.log(message.text)
-    //     console.log(`my id is: ${socket.id}`)
-    // })    
-
     socket.on('MessageFromServer', (message) => {
         const messages = document.querySelector('#messages'); 
         messages.insertAdjacentHTML("beforeend", "<li>"+message+"</li>");
     })
 
 
+    socket.on('CreateCard', (data) => {
+        // console.log("create card")
+		gameFunctions.createCard(data);
+	})    	    
 
 }        
 
 connFunctions.checkMessages(socket)
 
 
-// GAME OBJECT METHODS
+
+
+//  #####   #####  ######  ####### #       #       ######     #    ######  
+// #     # #     # #     # #     # #       #       #     #   # #   #     # 
+// #       #       #     # #     # #       #       #     #  #   #  #     # 
+//  #####  #       ######  #     # #       #       ######  #     # ######  
+//       # #       #   #   #     # #       #       #     # ####### #   #   
+// #     # #     # #    #  #     # #       #       #     # #     # #    #  
+//  #####   #####  #     # ####### ####### ####### ######  #     # #     # 
+
 
 connFunctions.updateGameElements = () => {
 	socket.on('MoveScrollbar', (data) => {
@@ -152,8 +132,198 @@ connFunctions.updateGameElements = () => {
 
 
 connFunctions.requestMoveScrollbar = (params, data) => {
-	if (gameFunctions.playerNumber === gameFunctions.currentPlayer)
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
 	{	
     	socket.emit('requestMoveScrollbar', data)
+	}
+}
+
+
+
+//  #####     #    ######  ######   #####  
+// #     #   # #   #     # #     # #     # 
+// #        #   #  #     # #     # #       
+// #       #     # ######  #     #  #####  
+// #       ####### #   #   #     #       # 
+// #     # #     # #    #  #     # #     # 
+//  #####  #     # #     # ######   ##### 
+
+connFunctions.updateCards = (socket) => {
+
+	
+    //READ THE MOUSE MOVEMENT DATA AND APPLY IT
+    if (gameFunctions.cards.length > 0)
+    {
+        socket.on('MoveCard', (data) => {
+            let card = gameFunctions.cards[data.card_id];
+			
+			if (card.locked === false){
+				card.x = data.mouseX
+				card.y = data.mouseY				
+			}
+
+			card.held = true;
+            card.depth = gameFunctions.config.depth_card_held;
+			
+			//SET ANY OTHER CARD THAT'S HELD BUT NOT LOCKED BACK TO DEFAULT SO IT APPEARS IN THE HAND AGAIN
+			gameFunctions.hand.forEach((card_id, i) => {
+				let card = gameFunctions.cards[card_id];
+				
+				if(card.held === true && card.locked === false && card.id !== gameFunctions.config.selected_card){					
+					card.held = false;
+				}
+			})									
+			
+            gameFunctions.config.selected_card = data.card_id;
+        })	
+		
+        socket.on('RotateCard', (data) => {
+            let card = gameFunctions.cards[data.card_id];
+			if(card.locked === false){
+            	card.angle += 90;
+			}
+			
+			switch(card.angle) {
+				case 0:
+					card.orientation = 0; //0
+					break;
+				case 90:
+					card.orientation = 1; //90
+					break;	
+				case -180:
+					card.orientation = 2; //180
+					break;
+				case -90:
+					card.orientation = 3; //270
+					break;				
+				default:
+			}
+        })	
+		
+        socket.on('SizeCard', (data) => {
+            let card = gameFunctions.cards[data.card_id];
+			
+			if(card.locked === false){
+				card.displayWidth = data.size;
+				card.scaleY = card.scaleX;	
+			}
+        })	
+		
+        socket.on('GridSnapCard', (data) => {
+            let card = gameFunctions.cards[data.card_id];
+			
+			if(card.locked === false){
+				card.setScrollFactor(1); //make buttons scrollable
+				card.x_table_pos = Math.floor(card.x / gameFunctions.config.cardSize);
+				card.y_table_pos = Math.floor(card.y / gameFunctions.config.cardSize);				
+				card.x = card.x_table_pos * gameFunctions.config.cardSize + (gameFunctions.config.cardSize / 2)
+				card.y = card.y_table_pos * gameFunctions.config.cardSize + (gameFunctions.config.cardSize / 2)
+			}
+			card.depth = gameFunctions.config.depth_card_table;
+        })		
+		
+        socket.on('PalmCard', (data) => {
+            let card = gameFunctions.cards[data.card_id];
+			card.held = false;
+			card.angle = 0;
+			card.depth = gameFunctions.config.depth_card_hand;
+			card.setScrollFactor(0); //make buttons non-scrollable
+
+			if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+			{			
+				gameFunctions.game.tweens.add({
+					targets: gameFunctions.scrollBar,
+					y: gameFunctions.config.yPosUp,
+					duration: 500,
+					ease: 'Power3'
+				});    			
+            }
+            gameFunctions.config.selected_card = -1;
+        })				
+		
+        socket.on('LockCard', (data) => {
+			gameFunctions.checkCardLock(data.card_id);
+        })				
+		
+    }		
+} 
+
+
+
+
+connFunctions.requestCreateCard = (params) => {
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{
+		let data = params;
+		
+    	socket.emit('requestCreateCard', data)
+	}
+}
+
+
+connFunctions.requestRotateCard = (socket, data) => {
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{
+    	socket.emit('requestRotateCard', data)
+	}
+}
+
+connFunctions.requestMoveCard = (socket, data) => {
+	//SEND OUT THE MOUSE MOVEMENT DATA
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{	
+		socket.emit('requestMoveCard', data)
+	}
+}        
+
+connFunctions.requestSizeCard = (socket, data) => {
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{
+		socket.emit('requestSizeCard', data)
+	}
+}        
+
+connFunctions.requestGridSnapCard = (socket, data) => {
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{
+		socket.emit('requestGridSnapCard', data)
+	}
+}        
+
+connFunctions.requestPalmCard = (socket, data) => {
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{
+		socket.emit('requestPalmCard', data)
+	}
+}        
+
+
+connFunctions.requestLockCard = () => {
+	
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{	
+		if (gameFunctions.cards.length > 0 && gameFunctions.config.selected_card !== -1)
+		{	
+			let card = gameFunctions.cards[gameFunctions.config.selected_card];
+			//SEND OUT THE MOUSE MOVEMENT DATA
+			let data = {
+				card_id: card.id
+			}
+			socket.emit('requestLockCard', data)
+		}
+	}
+}        
+
+connFunctions.requestMoveScrollbar = (params, data) => {
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{	
+    	socket.emit('requestMoveScrollbar', data)
+	}
+}
+
+connFunctions.requestChangePlayer = (params) => {
+	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
+	{	
+    	socket.emit('requestChangePlayer')
 	}
 }
