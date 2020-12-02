@@ -55,7 +55,6 @@ passport.deserializeUser(User.deserializeUser());
 //SETUP ROUTES
 app.use(require("./routes/index"));
 
-
 seedsUtil.seedDB();
 
 const expressServer = app.listen(3000, () => {
