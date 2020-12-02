@@ -56,6 +56,7 @@ app.use(require("./routes/index"));
 
 seedsUtil.seedDB();
 
+
 const expressServer = app.listen(3000, () => {
 // const expressServer = app.listen(process.env.PORT, process.env.IP, function(){	
     console.log("server running")
