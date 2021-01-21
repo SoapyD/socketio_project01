@@ -17,3 +17,12 @@ ROOM PROCESS
 
 -when a player leaves the room:
     -Remove them from the socket list
+
+
+
+BUGS
+//////////////////////////////////////////////////////////////////////
+
+-Setting a password on a room doesn't have any effect at the moment
+-There's no current way of limiting the number of players in the room
+-When a player rejoins a room, it doesn't reload any of the assets that've already been placed in said room. Need to keep track of them
