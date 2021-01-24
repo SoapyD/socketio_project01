@@ -16,6 +16,7 @@ gameFunctions.config = {
     
     game_state: 0,
     roomName: '',
+	roomID: '',
     playerNumber: 0,
     currentPlayer: 0, //1
     last_card: -1,
@@ -192,6 +193,7 @@ gameFunctions.setupButtons = () => {
 	
 	callbackParams = {
 		roomName: gameFunctions.config.roomName,
+		roomID: gameFunctions.config.roomID,  
 		deck_id: 0,
 		card_type: "a2"	
 	}
@@ -199,6 +201,7 @@ gameFunctions.setupButtons = () => {
 	
 	callbackParams = {
 		roomName: gameFunctions.config.roomName,				
+		roomID: gameFunctions.config.roomID, 
 		deck_id: 1,
 		card_type: "s2"	
 	}			
@@ -206,6 +209,7 @@ gameFunctions.setupButtons = () => {
 	
 	callbackParams = {
 		roomName: gameFunctions.config.roomName,				
+		roomID: gameFunctions.config.roomID, 
 		deck_id: 2,
 		card_type: "p2"	
 	}			
@@ -213,6 +217,7 @@ gameFunctions.setupButtons = () => {
 	
 	callbackParams = {
 		roomName: gameFunctions.config.roomName,				
+		roomID: gameFunctions.config.roomID, 
 		deck_id: 3,
 		card_type: "f2"	
 	}			
@@ -220,6 +225,7 @@ gameFunctions.setupButtons = () => {
 	
 	callbackParams = {
 		roomName: gameFunctions.config.roomName,				
+		roomID: gameFunctions.config.roomID, 
 		deck_id: 4,
 		card_type: "c2"	
 	}			

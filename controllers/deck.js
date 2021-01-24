@@ -1,5 +1,6 @@
 
 // const gameController = require('./game');
+const queriesUtil = require('../util/queries');
 
 // exports.room_decks = [];
 
@@ -148,15 +149,46 @@ exports.resetDecks = () => {
 		decks.push(deckCards);
 	}	
 	
-	// let data = {
-	// 	roomName: roomName
-	// 	,players: []
-	// 	,decks: decks
-	// 	,boardMatrix: []
-	// 	,definedCards: exports.defineCards()		
-    // }
     return decks;
 }
+
+exports.getRandomInt = (max) => {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+// exports.findRoomInfo = (roomName) => {
+// 	let pos = -1;
+// 	// console.log(exports.room_decks)
+// 	for(let i=0; i < exports.room_decks.length; i++){
+// 		let room_deck = exports.room_decks[i];
+// 		if (room_deck.roomName === roomName){
+// 			pos = i;
+// 		}
+// 	}
+// 	return pos
+// }
+
+exports.drawCard = (roomID, deck_id) => {
+	
+	queriesUtil.findRoom(roomID)
+	.then((room) => {
+
+		let card_id = -1;
+
+		if (room){
+			let deck = room.decks[deck_id];
+			if(deck.length > 0)
+			{
+				let rand = exports.getRandomInt(deck.length);
+				card_id = deck[rand];
+				deck.splice(rand, 1);
+			}
+			room.save()
+		}
+		return card_id;
+	})
+}
+
 
 
 
@@ -276,41 +308,10 @@ exports.checkBoardMatrix = (data) => {
 
 
 /*
-exports.getRandomInt = (max) => {
-  return Math.floor(Math.random() * Math.floor(max));
-}
 
-exports.findRoomInfo = (roomName) => {
-	let pos = -1;
-	// console.log(exports.room_decks)
-	for(let i=0; i < exports.room_decks.length; i++){
-		let room_deck = exports.room_decks[i];
-		if (room_deck.roomName === roomName){
-			pos = i;
-		}
-	}
-	return pos
-}
 
 // exports.
 
-exports.drawCard = (roomName, deck_id) => {
-	
-	let pos = exports.findRoomInfo(roomName);
-	
-	let card_id = -1;
-	
-	if (pos !== -1){
-		let deck = exports.room_decks[pos].decks[deck_id];
-		if(deck.length > 0)
-		{
-			let rand = exports.getRandomInt(deck.length);
-			card_id = deck[rand];
-			deck.splice(rand, 1);
-		}		
-	}
-	return card_id;
-}
 
 class Player {
   constructor(playerNumber, playerName, life, armour,

@@ -41,9 +41,12 @@ TWEENS
 
 DATABASE
 //////////////////////////////////////////////////////////////////////
--Save drawn deck to game info in DB
+-DONE -Save drawn deck to game info in DB
+-DONE -Save board layout to DB
+-DONE -Pass room ID back to players to use later
+
 -Save game info (like lives) to DB
--Save board layout to DB
+
 
 
 ROOM PROCESS

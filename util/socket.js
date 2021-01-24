@@ -1,4 +1,4 @@
-// const deckController = require('./deck');
+const deckController = require('../controllers/deck');
 // const gameController = require('./game');
 
 const functionsUtil = require('../util/functions');
@@ -51,10 +51,12 @@ exports.checkMessages = (io,namespace) => {
 						// io.in(roomName).emit('roomMessage', data);
 						
 						// io.to(socket.id).emit('MessageFromServer', 'Room Created!');
-
+						// console.log(room._id)
+						
 						let return_data = {
 							userName: data.userName
 							,roomName: data.roomName
+							,roomID: room._id
 							,playerNumber: room.users.indexOf(data.userID)
 						}
 						socket.join(data.roomName)
@@ -89,6 +91,7 @@ exports.checkMessages = (io,namespace) => {
 								let return_data = {
 									userName: data.userName
 									,roomName: data.roomName
+									,roomID: room._id
 									,playerNumber: room.users.indexOf(data.userID)
 								}
 								//send room info back to socket
@@ -106,6 +109,7 @@ exports.checkMessages = (io,namespace) => {
 							let return_data = {
 								userName: data.userName
 								,roomName: data.roomName
+								,roomID: room._id
 								,playerNumber: room.users.indexOf(data.userID)
 							}
 							//send room info back to socket
@@ -166,10 +170,14 @@ exports.checkMessages = (io,namespace) => {
 
 
 		socket.on('requestCreateCard', (data) => {
-			// let card_number = deckController.drawCard(data.roomName, data.deck_id);
-			let card_number = 0
-			data.card_number = card_number;
-			io.of(namespace).emit("CreateCard", data)
+			if (data.roomID !== '')
+			{
+				let card_number = deckController.drawCard(data.roomID, data.deck_id);
+				// let card_number = 0
+				data.card_number = card_number;
+				io.of(namespace).emit("CreateCard", data)				
+			}
+
 		})	
 
 		socket.on('requestMoveCard', (data) => {

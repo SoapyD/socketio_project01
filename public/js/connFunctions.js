@@ -1,7 +1,7 @@
 
-// const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
+const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
 // const address = 'https://soaps-card-game.azurewebsites.net';
-const address = 'http://localhost:3000';
+// const address = 'http://localhost:3000';
 // const address = 'http://localhost:3000/admin';
 const socket = io(address)
 
@@ -71,6 +71,9 @@ connFunctions.checkMessages = (socket) => {
     });
 
     socket.on('roomInfo', (data) => {
+		gameFunctions.config.roomName = data.roomName
+		gameFunctions.config.roomID = data.roomID		
+		
         const messages = document.querySelector('#messages'); 
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
         $('#message-form').slideToggle(1000);

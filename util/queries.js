@@ -39,9 +39,6 @@ exports.createRoom = (room_data, socket_id) => {
         ,decks: decks
         ,matrix: boardmatrix
     })
-
-
-
 }
 
 // exports.addRoomUser = async(room, userID) => {
