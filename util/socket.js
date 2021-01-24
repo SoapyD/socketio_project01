@@ -172,10 +172,14 @@ exports.checkMessages = (io,namespace) => {
 		socket.on('requestCreateCard', (data) => {
 			if (data.roomID !== '')
 			{
-				let card_number = deckController.drawCard(data.roomID, data.deck_id);
-				// let card_number = 0
-				data.card_number = card_number;
-				io.of(namespace).emit("CreateCard", data)				
+                // let card_number = deckController.drawCard(data.roomID, data.deck_id);
+                deckController.drawCard(data.roomID, data.deck_id)
+                .then((card_number) =>{
+                    // let card_number = 0
+                    data.card_number = card_number;
+                    io.of(namespace).emit("CreateCard", data)	
+                });
+			
 			}
 
 		})	

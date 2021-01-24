@@ -169,24 +169,36 @@ exports.getRandomInt = (max) => {
 // }
 
 exports.drawCard = (roomID, deck_id) => {
-	
-	queriesUtil.findRoom(roomID)
-	.then((room) => {
+    
+    return new Promise(function(resolve,reject)
+    {
+        let card_id = -1;
 
-		let card_id = -1;
+        queriesUtil.findRoom(roomID)
+        .then((room) => {
+    
+            if (room){
+                let deck = room.decks[deck_id];
+                if(deck.length > 0)
+                {
+                    let rand = exports.getRandomInt(deck.length);
+                    card_id = deck[rand];
+                    deck.splice(rand, 1);
+                    room.decks[deck_id] = deck;
+                }
 
-		if (room){
-			let deck = room.decks[deck_id];
-			if(deck.length > 0)
-			{
-				let rand = exports.getRandomInt(deck.length);
-				card_id = deck[rand];
-				deck.splice(rand, 1);
-			}
-			room.save()
-		}
-		return card_id;
-	})
+                room.markModified('decks');
+                room.save((err, room)=>{
+                    // return card_id;
+                    // console.log(card_id)
+                    resolve(card_id)
+                })
+            }
+
+        })
+    })
+
+
 }
 
 
