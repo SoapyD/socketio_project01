@@ -179,11 +179,23 @@ connFunctions.updateCards = (socket) => {
 		
         socket.on('RotateCard', (data) => {
             let card = gameFunctions.cards[data.card_id];
+            let next_angle = card.angle;
 			if(card.locked === false){
-            	card.angle += 90;
+                // card.angle += 90;
+                next_angle += 90
+
+                //Add TWEEN
+				gameFunctions.game.tweens.add({
+					targets: card,
+					angle: next_angle,
+					duration: 500,
+					ease: 'Power3'
+				});    	
+
+                
 			}
 			
-			switch(card.angle) {
+			switch(next_angle) {
 				case 0:
 					card.orientation = 0; //0
 					break;
@@ -204,8 +216,18 @@ connFunctions.updateCards = (socket) => {
             let card = gameFunctions.cards[data.card_id];
 			
 			if(card.locked === false){
-				card.displayWidth = data.size;
-				card.scaleY = card.scaleX;	
+				// card.displayWidth = data.size;
+                // card.scaleY = card.scaleX;	
+                
+				gameFunctions.game.tweens.add({
+					targets: card,
+                    displayWidth: data.size,
+                    displayHeight: data.size,
+                    // scaleY: gameFunctions.cards[data.card_id].scaleX,
+					duration: 200,
+					ease: 'Power3'
+				});  
+
 			}
         })	
 		
@@ -224,10 +246,9 @@ connFunctions.updateCards = (socket) => {
 		
         socket.on('PalmCard', (data) => {
             let card = gameFunctions.cards[data.card_id];
-			card.held = false;
-			card.angle = 0;
-			card.depth = gameFunctions.config.depth_card_hand;
-			card.setScrollFactor(0); //make buttons non-scrollable
+            card.held = false;
+            gameFunctions.config.selected_card = -1;
+
 
 			if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
 			{			
@@ -238,7 +259,7 @@ connFunctions.updateCards = (socket) => {
 					ease: 'Power3'
 				});    			
             }
-            gameFunctions.config.selected_card = -1;
+            
         })				
 		
         socket.on('LockCard', (data) => {

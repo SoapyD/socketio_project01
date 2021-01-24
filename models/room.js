@@ -3,21 +3,29 @@ const mongoose = require("mongoose");
 
 
 const roomSchema = new mongoose.Schema({
-	roomName: String,
-	password: String,
-	sockets: [String],
-    users: [{ 
+	roomName: String
+	,password: String
+	,sockets: [String]
+    ,users: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User' 
-    }],
+    }]
 
-	author: {
+	,author: {
 		id: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User"
 		},
 		userName: String
-	}
+    }
+
+    ,decks: [[Number]]
+    ,matrix: [[{
+        deck_id : Number,
+        card_id : Number,
+        card_number : Number,
+        orientation : Number
+    }]]    
 
 });
 

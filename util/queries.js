@@ -1,5 +1,5 @@
-const room = require("../models/room");
 const Room = require("../models/room");
+const deckController = require('../controllers/deck');
 
 
 exports.findRoom = (id) => {
@@ -27,14 +27,21 @@ exports.createRoom = (room_data, socket_id) => {
     let sockets = [];
     sockets.push(socket_id);
 
-        return Room.create ({
-            roomName: room_data.roomName,
-            password: room_data.password,
-            author: author,
-            users: users,
-            sockets: sockets
-        }
-    )
+    let decks = deckController.resetDecks();
+    let boardmatrix = deckController.setupBoardMatrix();
+
+    return Room.create ({
+        roomName: room_data.roomName
+        ,password: room_data.password
+        ,author: author
+        ,users: users
+        ,sockets: sockets
+        ,decks: decks
+        ,matrix: boardmatrix
+    })
+
+
+
 }
 
 // exports.addRoomUser = async(room, userID) => {

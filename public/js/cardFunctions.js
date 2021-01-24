@@ -227,14 +227,17 @@ gameFunctions.checkCardLock = (card_id) => {
 
 gameFunctions.updateHandCards = () => {
 	gameFunctions.hand.forEach((card_id, i) => {
-		let card = gameFunctions.cards[card_id];
+        let card = gameFunctions.cards[card_id];
 
-		if(card.held === false){					
-			card.x = gameFunctions.scrollBar.x + (gameFunctions.config.handCardSize / 2) + (gameFunctions.config.handCardSize * i);
-			card.y = gameFunctions.scrollBar.y;
-			
-			card.setScrollFactor(0); //make buttons non-scrollable
-		}
+        if(card.held === false){					
+            card.angle = 0;
+            card.depth = gameFunctions.config.depth_card_hand;
+    
+            card.x = gameFunctions.scrollBar.x + (gameFunctions.config.handCardSize / 2) + (gameFunctions.config.handCardSize * i);
+            card.y = gameFunctions.scrollBar.y;
+            
+            card.setScrollFactor(0); //make buttons non-scrollable
+        }
 
 	})	
 }

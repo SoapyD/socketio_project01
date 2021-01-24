@@ -17,6 +17,8 @@ const seedsUtil = require('./util/seeds');
 
 //MODELS
 const User = require("./models/user");
+const Room = require("./models/room");
+
 
 
 // SETUP APP

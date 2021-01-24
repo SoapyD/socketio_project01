@@ -2,9 +2,49 @@
 -Add in step to the socket util that checks for reconnections and automatically tries to rejoin room
 -Maybe have it that if the author gets kicked out of the room, everyone is kicked out too?
 
+-Handle "check card lock" process on the server instead of the client
+    -Need to have the following vars on the server:
+        -last card
+        -cards array
 
--Add tween for cards changing sizes
+
+-"request change player" doesn't do anything
+-Drawing a card doesn't take a card from a deck, it's just a set value at the moment
+-Add in a deck generator when the game starts (Needs to be on server)
+-End turn doesn't do anything
+
+
+
+DECK
+//////////////////////////////////////////////////////////////////////
+
+-DONE -create a deck array (for drawing cards) and add it to the room model
+-DONE -create a board matrix array and add it to the room model
+
+-update "update board matrix" function
+-update "check board matrix" function
+
+-Have cards data on the server
+
+
+
+
+
+
+TWEENS
+//////////////////////////////////////////////////////////////////////
+-DONE -Add tween for cards changing sizes
+-DONE -Add tween for card rotation
+
 -Add tween for card going back into the hand bar
+
+
+DATABASE
+//////////////////////////////////////////////////////////////////////
+-Save drawn deck to game info in DB
+-Save game info (like lives) to DB
+-Save board layout to DB
+
 
 ROOM PROCESS
 //////////////////////////////////////////////////////////////////////
@@ -26,3 +66,5 @@ BUGS
 -Setting a password on a room doesn't have any effect at the moment
 -There's no current way of limiting the number of players in the room
 -When a player rejoins a room, it doesn't reload any of the assets that've already been placed in said room. Need to keep track of them
+-Palming "max height" check doesn't work. Won't allow cards to be placed in bottom 2 rows of grid
+-picking up card from scrollbar always ends up making the center point move upwards, making the card annoying to place

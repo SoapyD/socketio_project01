@@ -3,8 +3,8 @@
 
 const functionsUtil = require('../util/functions');
 const queriesUtil = require('../util/queries');
-const User = require("../models/user");
-const room = require('../models/room');
+// const User = require("../models/user");
+// const room = require('../models/room');
 
 
 
