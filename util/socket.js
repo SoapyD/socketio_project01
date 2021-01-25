@@ -117,6 +117,10 @@ exports.checkMessages = (io,namespace) => {
 						})
 						socket.join(data.roomName)
 					}
+					
+					if (room.users.length >= room.max_players){
+						io.of(namespace).emit("startGame", data)
+					}
 				
 				}else{
 					// ELSE, ALLOW THE ROOM TO BE CREATED

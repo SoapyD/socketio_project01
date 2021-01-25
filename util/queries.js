@@ -36,6 +36,9 @@ exports.createRoom = (room_data, socket_id) => {
         ,author: author
         ,users: users
         ,sockets: sockets
+		
+		,max_players: 2
+		
         ,decks: decks
         ,matrix: boardmatrix
     })

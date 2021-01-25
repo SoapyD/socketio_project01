@@ -100,12 +100,16 @@ gameFunctions.createCard = (data) => {
 	card.deck_id = data.deck_id;
 	card.card_number = data.card_number;
 	//IF CURRENT PLAYER THEN LOAD FRONT OF CARD, ELSE LOAD CARD BACK
+	// console.log(gameFunctions.config.playerNumber)
+	// console.log(gameFunctions.config.currentPlayer)
 	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
-	{		
+	{	
+		// console.log("card no: "+String(card.card_number))
 		card.setFrame(card.card_number);
 	}
 	else {
-		card.setFrame(gameFunctions.card_back);
+		// console.log("card back: "+String(gameFunctions.card_back))
+		card.setFrame(gameFunctions.config.card_back);
 	}
 		
     card.displayWidth = gameFunctions.config.cardSize;

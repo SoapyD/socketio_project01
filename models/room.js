@@ -19,6 +19,12 @@ const roomSchema = new mongoose.Schema({
 		userName: String
     }
 
+	,max_players: Number
+	,current_player: {type: Number, default: 0}
+	
+	,cards: [Number]
+	,last_card: {type: Number, default: -1}
+	
     ,decks: [[Number]]
     ,matrix: [[{
         deck_id : Number,

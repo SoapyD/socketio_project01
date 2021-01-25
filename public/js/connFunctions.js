@@ -1,8 +1,10 @@
 
-// const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
 // const address = 'https://soaps-card-game.azurewebsites.net';
-const address = 'http://localhost:3000';
 // const address = 'http://localhost:3000/admin';
+
+
+const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
+// const address = 'http://localhost:3000';
 const socket = io(address)
 
 $('#message-input').slideUp(0);
@@ -72,13 +74,14 @@ connFunctions.checkMessages = (socket) => {
 
     socket.on('roomInfo', (data) => {
 		gameFunctions.config.roomName = data.roomName
-		gameFunctions.config.roomID = data.roomID		
+		gameFunctions.config.roomID = data.roomID	
+		gameFunctions.config.playerNumber = data.playerNumber
 		
         const messages = document.querySelector('#messages'); 
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
         $('#message-form').slideToggle(1000);
         $('#message-input').slideDown(1000);
-        gameFunctions.config.game_state += 1;
+        // gameFunctions.config.game_state += 1;
     })
 
     socket.on('roomMessage', (data) => {
@@ -86,12 +89,13 @@ connFunctions.checkMessages = (socket) => {
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
     })
 
-    socket.on('checkStart', (data) => {
+    socket.on('startGame', (data) => {
         
-        if(data.usersNumber === 1)
-        {
-            $('#start-button').removeClass('hidden');
-        }	
+        // if(data.usersNumber === 1)
+        // {
+        //     $('#start-button').removeClass('hidden');
+        // }
+		gameFunctions.config.game_state += 1;
     })	
 
     socket.on('joinFailed', (data) => {
