@@ -4,6 +4,18 @@ const queriesUtil = require('../util/queries');
 
 // exports.room_decks = [];
 
+
+
+
+
+//  #####     #    ######  ######   #####  
+// #     #   # #   #     # #     # #     # 
+// #        #   #  #     # #     # #       
+// #       #     # ######  #     #  #####  
+// #       ####### #   #   #     #       # 
+// #     # #     # #    #  #     # #     # 
+//  #####  #     # #     # ######   #####  
+
 class CardType {
     constructor(type, top, right, bottom, left) {
       this.type = type;
@@ -131,7 +143,13 @@ exports.defineCards = () => {
 
 
 
-
+// ######  #######  #####  #    #  #####  
+// #     # #       #     # #   #  #     # 
+// #     # #       #       #  #   #       
+// #     # #####   #       ###     #####  
+// #     # #       #       #  #         # 
+// #     # #       #     # #   #  #     # 
+// ######  #######  #####  #    #  #####  
 
 
 exports.resetDecks = () => {
@@ -156,20 +174,10 @@ exports.getRandomInt = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-// exports.findRoomInfo = (roomName) => {
-// 	let pos = -1;
-// 	// console.log(exports.room_decks)
-// 	for(let i=0; i < exports.room_decks.length; i++){
-// 		let room_deck = exports.room_decks[i];
-// 		if (room_deck.roomName === roomName){
-// 			pos = i;
-// 		}
-// 	}
-// 	return pos
-// }
 
 exports.drawCard = (roomID, deck_id) => {
     
+// 	SETUP a promise that we need to resolve before the function returns anything
     return new Promise(function(resolve,reject)
     {
         let card_id = -1;
@@ -185,16 +193,26 @@ exports.drawCard = (roomID, deck_id) => {
                     card_id = deck[rand];
                     deck.splice(rand, 1);
                     room.decks[deck_id] = deck;
-                }
 
-                room.markModified('decks');
-                room.save((err, room)=>{
-                    // return card_id;
-                    // console.log(card_id)
-                    resolve(card_id)
-                })
+					room.cards.push({
+						deck_id: deck_id
+						,card_id: card_id
+					})
+
+					room.markModified('decks');
+					room.markModified('cards');
+					room.save((err, room)=>{
+						resolve(card_id)
+					})				
+				
+				}
+				else{
+					resolve(card_id)
+				}
             }
-
+			else{
+				resolve(card_id)
+			}
         })
     })
 
@@ -204,7 +222,13 @@ exports.drawCard = (roomID, deck_id) => {
 
 
 
-
+// #     #    #    ####### ######  ### #     # 
+// ##   ##   # #      #    #     #  #   #   #  
+// # # # #  #   #     #    #     #  #    # #   
+// #  #  # #     #    #    ######   #     #    
+// #     # #######    #    #   #    #    # #   
+// #     # #     #    #    #    #   #   #   #  
+// #     # #     #    #    #     # ### #     # 
 
 exports.setupBoardMatrix = () => {
 	

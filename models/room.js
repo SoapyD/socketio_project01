@@ -22,7 +22,11 @@ const roomSchema = new mongoose.Schema({
 	,max_players: Number
 	,current_player: {type: Number, default: 0}
 	
-	,cards: [Number]
+	,cards: [{
+		deck_id: Number
+		,card_id: Number		
+	}]
+	,selected_card: {type: Number, default: -1}
 	,last_card: {type: Number, default: -1}
 	
     ,decks: [[Number]]
@@ -33,6 +37,9 @@ const roomSchema = new mongoose.Schema({
         orientation : Number
     }]]    
 
+   ,created_date: {type: Date, default: Date.now}
+   ,updateddate: {type: Date, default: Date.now}	
+	
 });
 
 

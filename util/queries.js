@@ -44,6 +44,30 @@ exports.createRoom = (room_data, socket_id) => {
     })
 }
 
+exports.setSelectedCard = (data) => {
+    return new Promise(function(resolve,reject)
+    {
+		let saved = false;
+		// console.log(data)
+
+        exports.findRoom(data.roomID)
+        .then((room) => {
+    
+            if (room){
+				room.selected_card = data.card_id
+
+				room.markModified('selected_card');
+				room.save((err, room)=>{
+					resolve(saved)
+				})	
+            }
+			else{
+				resolve(saved)
+			}
+        })
+    })	
+}
+
 // exports.addRoomUser = async(room, userID) => {
 //     room.users.push(userID)
 //     await room.save()

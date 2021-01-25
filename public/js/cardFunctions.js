@@ -53,7 +53,8 @@ gameFunctions.createCard = (data) => {
 			connFunctions.requestSizeCard(socket, data)
 	
 			data = {
-				card_id: card.id
+				roomID: gameFunctions.config.roomID
+				,card_id: card.id
 			}			
 			connFunctions.requestGridSnapCard(socket, data)
 			

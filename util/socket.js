@@ -180,8 +180,10 @@ exports.checkMessages = (io,namespace) => {
                 deckController.drawCard(data.roomID, data.deck_id)
                 .then((card_number) =>{
                     // let card_number = 0
-                    data.card_number = card_number;
-                    io.of(namespace).emit("CreateCard", data)	
+					if (card_number >= 0){
+						data.card_number = card_number;
+						io.of(namespace).emit("CreateCard", data)							
+					}
                 });
 			
 			}
@@ -201,7 +203,12 @@ exports.checkMessages = (io,namespace) => {
 		})					
 		
 		socket.on('requestGridSnapCard', (data) => {
-			io.of(namespace).emit("GridSnapCard",data)
+			//ADD IN SET SELECTED CARD FUNCTION HERE
+			queriesUtil.setSelectedCard(data)
+			.then((saved)=> {
+				io.of(namespace).emit("GridSnapCard",data)				
+			})
+
 		})							
 		
 		socket.on('requestPalmCard', (data) => {
