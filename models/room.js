@@ -24,7 +24,9 @@ const roomSchema = new mongoose.Schema({
 	
 	,cards: [{
 		deck_id: Number
-		,card_id: Number		
+		,card_id: Number
+		,x_table_pos: Number
+		,y_table_pos: Number		
 	}]
 	,selected_card: {type: Number, default: -1}
 	,last_card: {type: Number, default: -1}

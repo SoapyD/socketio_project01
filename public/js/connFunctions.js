@@ -162,7 +162,8 @@ connFunctions.updateCards = (socket) => {
     if (gameFunctions.cards.length > 0)
     {
         socket.on('MoveCard', (data) => {
-            let card = gameFunctions.cards[data.card_id];
+			
+            let card = gameFunctions.cards[data.cards_array_id];
 			
 			if (card.locked === false){
 				card.x = data.mouseX
@@ -173,19 +174,19 @@ connFunctions.updateCards = (socket) => {
             card.depth = gameFunctions.config.depth_card_held;
 			
 			//SET ANY OTHER CARD THAT'S HELD BUT NOT LOCKED BACK TO DEFAULT SO IT APPEARS IN THE HAND AGAIN
-			gameFunctions.hand.forEach((card_id, i) => {
-				let card = gameFunctions.cards[card_id];
+			gameFunctions.hand.forEach((cards_array_id, i) => {
+				let card = gameFunctions.cards[cards_array_id];
 				
 				if(card.held === true && card.locked === false && card.id !== gameFunctions.config.selected_card){					
 					card.held = false;
 				}
 			})									
 			
-            gameFunctions.config.selected_card = data.card_id;
+            gameFunctions.config.selected_card = data.cards_array_id;
         })	
 		
         socket.on('RotateCard', (data) => {
-            let card = gameFunctions.cards[data.card_id];
+            let card = gameFunctions.cards[data.cards_array_id];
             let next_angle = card.angle;
 			if(card.locked === false){
                 // card.angle += 90;
@@ -220,7 +221,7 @@ connFunctions.updateCards = (socket) => {
         })	
 		
         socket.on('SizeCard', (data) => {
-            let card = gameFunctions.cards[data.card_id];
+            let card = gameFunctions.cards[data.cards_array_id];
 			
 			if(card.locked === false){
 				// card.displayWidth = data.size;
@@ -239,7 +240,7 @@ connFunctions.updateCards = (socket) => {
         })	
 		
         socket.on('GridSnapCard', (data) => {
-            let card = gameFunctions.cards[data.card_id];
+            let card = gameFunctions.cards[data.cards_array_id];
 			
 			if(card.locked === false){
 				card.setScrollFactor(1); //make buttons scrollable
@@ -252,7 +253,7 @@ connFunctions.updateCards = (socket) => {
         })		
 		
         socket.on('PalmCard', (data) => {
-            let card = gameFunctions.cards[data.card_id];
+            let card = gameFunctions.cards[data.cards_array_id];
             card.held = false;
             gameFunctions.config.selected_card = -1;
 
@@ -269,9 +270,9 @@ connFunctions.updateCards = (socket) => {
             
         })				
 		
-        socket.on('LockCard', (data) => {
-			gameFunctions.checkCardLock(data.card_id);
-        })				
+			// socket.on('LockCard', (data) => {
+			// gameFunctions.checkCardLock(data.card_id);
+			// })				
 		
     }		
 } 
@@ -283,7 +284,9 @@ connFunctions.requestCreateCard = (params) => {
 	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
 	{
 		let data = params;
-		
+		data.roomName = gameFunctions.config.roomName
+		data.roomID = gameFunctions.config.roomID
+			
     	socket.emit('requestCreateCard', data)
 	}
 }
@@ -335,7 +338,7 @@ connFunctions.requestLockCard = () => {
 			let card = gameFunctions.cards[gameFunctions.config.selected_card];
 			//SEND OUT THE MOUSE MOVEMENT DATA
 			let data = {
-				card_id: card.id
+				cards_array_id: card.id
 			}
 			socket.emit('requestLockCard', data)
 		}

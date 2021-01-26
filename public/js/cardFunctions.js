@@ -11,7 +11,7 @@ gameFunctions.createCard = (data) => {
 			if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
 			{                
 				let data = {
-					card_id: gameObject.id,
+					cards_array_id: gameObject.id,
 					mouseX: dragX,
 					mouseY: dragY		
 				}
@@ -25,7 +25,7 @@ gameFunctions.createCard = (data) => {
         if (pointer.leftButtonDown())
         {			
 			let data = {
-				card_id: card.id,
+				cards_array_id: card.id,
 				size: gameFunctions.config.largeCardSize
 			}			
 			connFunctions.requestSizeCard(socket, data) 	
@@ -47,14 +47,14 @@ gameFunctions.createCard = (data) => {
         if (pointer.leftButtonReleased())
         {
 			let data = {
-				card_id: card.id,
+				cards_array_id: card.id,
 				size: gameFunctions.config.cardSize
 			}			
 			connFunctions.requestSizeCard(socket, data)
 	
 			data = {
 				roomID: gameFunctions.config.roomID
-				,card_id: card.id
+				,cards_array_id: card.id
 			}			
 			connFunctions.requestGridSnapCard(socket, data)
 			
@@ -64,7 +64,7 @@ gameFunctions.createCard = (data) => {
 				// card.held = false;
 				// card.placed = false;
 				data = {
-					card_id: card.id
+					cards_array_id: card.id
 				}							
 				connFunctions.requestPalmCard(socket, data)
 			}
@@ -73,7 +73,7 @@ gameFunctions.createCard = (data) => {
 		if (pointer.rightButtonReleased())
         {
 			let data = {
-				card_id: card.id
+				cards_array_id: card.id
 			}			
 			connFunctions.requestRotateCard(socket, data) 
 		}
@@ -155,7 +155,7 @@ gameFunctions.createCard = (data) => {
 }
 
 
-
+/*
 gameFunctions.checkCardLock = (card_id) => {
 	let card = gameFunctions.cards[card_id];
 	let last_card;
@@ -229,10 +229,11 @@ gameFunctions.checkCardLock = (card_id) => {
 	}
 
 }
+*/
 
 gameFunctions.updateHandCards = () => {
-	gameFunctions.hand.forEach((card_id, i) => {
-        let card = gameFunctions.cards[card_id];
+	gameFunctions.hand.forEach((cards_array_id, i) => {
+        let card = gameFunctions.cards[cards_array_id];
 
         if(card.held === false){					
             card.angle = 0;

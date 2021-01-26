@@ -14,6 +14,9 @@
 -End turn doesn't do anything
 
 
+-Set grid set function x and y positions on the server then pass it back.
+-DONE -Replace instances of card_id where it's actually "cards_array_id" to make things clear
+
 
 DECK
 //////////////////////////////////////////////////////////////////////
@@ -25,6 +28,8 @@ DECK
 -update "check board matrix" function
 
 -Have cards data on the server
+	-Card X and Y pos
+	-Card grid X and Y pos
 
 
 
@@ -66,8 +71,18 @@ ROOM PROCESS
 BUGS
 //////////////////////////////////////////////////////////////////////
 
+-DONE -When max player is set to 1 and the player leaves and reenters room, they can't draw any cards
+	-DONE -The problem comes from the "room info" request appearing after the game "start message" so when the create card buttons are made, they don't set with the correct room info.	Fixed by assigning the adding the room name and id when the connection function is run, instead of pre-loading the values. 
+
+
 -Setting a password on a room doesn't have any effect at the moment
 -There's no current way of limiting the number of players in the room
 -When a player rejoins a room, it doesn't reload any of the assets that've already been placed in said room. Need to keep track of them
 -Palming "max height" check doesn't work. Won't allow cards to be placed in bottom 2 rows of grid
 -picking up card from scrollbar always ends up making the center point move upwards, making the card annoying to place
+
+
+-Seems that when there's a second player added in this setup the drawn card doesn't snap into the hand bar on player 1's screen but does on the non-current player 2 screen.
+	-There's a lot of oddities here as now the second player, when it joins room 1, doesn't have the ui generate
+
+	

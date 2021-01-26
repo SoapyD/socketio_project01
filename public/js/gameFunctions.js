@@ -192,40 +192,40 @@ gameFunctions.setupButtons = () => {
 	let far_right = config.width
 	
 	callbackParams = {
-		roomName: gameFunctions.config.roomName,
-		roomID: gameFunctions.config.roomID,  
+		// roomName: gameFunctions.config.roomName,
+		// roomID: gameFunctions.config.roomID,  
 		deck_id: 0,
 		card_type: "a2"	
 	}
 	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY - 100, "armour", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
 	
 	callbackParams = {
-		roomName: gameFunctions.config.roomName,				
-		roomID: gameFunctions.config.roomID, 
+		// roomName: gameFunctions.config.roomName,				
+		// roomID: gameFunctions.config.roomID, 
 		deck_id: 1,
 		card_type: "s2"	
 	}			
 	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY - 50, "speed", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
 	
 	callbackParams = {
-		roomName: gameFunctions.config.roomName,				
-		roomID: gameFunctions.config.roomID, 
+		// roomName: gameFunctions.config.roomName,				
+		// roomID: gameFunctions.config.roomID, 
 		deck_id: 2,
 		card_type: "p2"	
 	}			
 	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY, "physical", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
 	
 	callbackParams = {
-		roomName: gameFunctions.config.roomName,				
-		roomID: gameFunctions.config.roomID, 
+		// roomName: gameFunctions.config.roomName,				
+		// roomID: gameFunctions.config.roomID, 
 		deck_id: 3,
 		card_type: "f2"	
 	}			
 	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY + 50, "focus", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
 	
 	callbackParams = {
-		roomName: gameFunctions.config.roomName,				
-		roomID: gameFunctions.config.roomID, 
+		// roomName: gameFunctions.config.roomName,				
+		// roomID: gameFunctions.config.roomID, 
 		deck_id: 4,
 		card_type: "c2"	
 	}			

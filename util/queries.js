@@ -37,7 +37,7 @@ exports.createRoom = (room_data, socket_id) => {
         ,users: users
         ,sockets: sockets
 		
-		,max_players: 2
+		,max_players: 1//2
 		
         ,decks: decks
         ,matrix: boardmatrix
@@ -54,7 +54,9 @@ exports.setSelectedCard = (data) => {
         .then((room) => {
     
             if (room){
-				room.selected_card = data.card_id
+				room.selected_card = data.cards_array_id
+				
+				room.cards[data.cards_array_id] 
 
 				room.markModified('selected_card');
 				room.save((err, room)=>{

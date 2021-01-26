@@ -215,10 +215,65 @@ exports.drawCard = (roomID, deck_id) => {
 			}
         })
     })
-
-
 }
 
+exports.checkTouching = (roomID, cards_array_id) => {
+	//GET CARD
+
+	//TOUCHING CHECK WITH LAST CARD
+
+	queriesUtil.findRoom(roomID)
+	.then((room) => {	
+
+		//
+		let card = room.cards[cards_array_id];
+		let last_card;
+
+		//CHECK IF POSITION IS NEXT TO LAST CARD
+		let touching = 0;
+		let touch_direction = -1; //touching direction between last and new card 
+		
+		/*
+		if(room.last_card !== -1) //if there is a last card
+		{
+			last_card = room.cards[room.last_card];
+			if (last_card.x_table_pos - 1 === card.x_table_pos || last_card.x_table_pos + 1 === card.x_table_pos){
+				if (last_card.y_table_pos === card.y_table_pos){
+					touching = 1;
+
+					if(card.x_table_pos < last_card.x_table_pos){
+						touch_direction = 3
+					}
+					if(card.x_table_pos > last_card.x_table_pos){
+						touch_direction = 1
+					}				
+				}
+			}
+
+			if (last_card.y_table_pos - 1 === card.y_table_pos || last_card.y_table_pos + 1 === card.y_table_pos){
+				if (last_card.x_table_pos === card.x_table_pos){
+					touching = 1;
+
+					if(card.y_table_pos < last_card.y_table_pos){
+						touch_direction = 0
+					}
+					if(card.y_table_pos > last_card.y_table_pos){
+						touch_direction = 2
+					}								
+				}
+			}		
+		}else{
+			touching = -1;
+		}
+
+		console.log("touching: "+touching.toString())
+
+		if (touching !== 0){
+			//LOCK AND FLIP THE CARD
+		}
+		*/
+	})
+}
 
 
 

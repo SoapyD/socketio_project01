@@ -63,9 +63,13 @@ exports.checkMessages = (io,namespace) => {
 						//send room info back to socket
 						io.to(socket.id).emit('roomInfo', return_data);
 
+						if (room.users.length >= room.max_players){
+							io.of(namespace).emit("startGame", data)
+						}						
+						
 					})
 
-				}
+				}				
 			})
 		})
 
@@ -174,6 +178,7 @@ exports.checkMessages = (io,namespace) => {
 
 
 		socket.on('requestCreateCard', (data) => {
+
 			if (data.roomID !== '')
 			{
                 // let card_number = deckController.drawCard(data.roomID, data.deck_id);
@@ -216,7 +221,9 @@ exports.checkMessages = (io,namespace) => {
 		})		
 		
 		socket.on('requestLockCard', (data) => {
-			io.of(namespace).emit("LockCard",data)
+			// io.of(namespace).emit("LockCard",data)
+			
+			// deckController.checkTouching(roomID, card_id)			
 		})									
 		
 	
