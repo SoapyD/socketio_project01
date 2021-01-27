@@ -22,11 +22,28 @@ const roomSchema = new mongoose.Schema({
 	,max_players: Number
 	,current_player: {type: Number, default: 0}
 	
+	
+	,config: {
+		cardSize: Number
+		,handCardSize: Number
+		,largeCardSize: Number
+		,tableWidth: Number
+		,tableHeight: Number
+		,card_back: Number
+
+		,depth_card_table: Number
+		,depth_card_table_graphic: Number
+		,depth_card_hand: Number
+		,depth_card_held: Number		
+	}
+	
 	,cards: [{
 		deck_id: Number
 		,card_id: Number
-		,x_table_pos: Number
-		,y_table_pos: Number		
+		,x: {type: Number, default: 0}
+		,y: {type: Number, default: 0}		
+		,x_table_pos: {type: Number, default: 0}
+		,y_table_pos: {type: Number, default: 0}		
 	}]
 	,selected_card: {type: Number, default: -1}
 	,last_card: {type: Number, default: -1}

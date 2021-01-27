@@ -55,8 +55,12 @@ gameFunctions.createCard = (data) => {
 			data = {
 				roomID: gameFunctions.config.roomID
 				,cards_array_id: card.id
+				,card_x: card.x
+				,card_y: card.y
+				
 			}			
 			connFunctions.requestGridSnapCard(socket, data)
+			
 			
 			let max_height = gameFunctions.config.cardSize * (gameFunctions.config.tableHeight - 1);
 

@@ -24,15 +24,17 @@ DECK
 -DONE -create a deck array (for drawing cards) and add it to the room model
 -DONE -create a board matrix array and add it to the room model
 
+-DONE -Have cards data on the server
+	-DONE -Card X and Y pos
+	-DONE -Card grid X and Y pos
+
+-DONE -BUG -It's now difficult to get the card off of the scrollbar. It eventually can be pulled from it but only after the bar is revisited a number of times
+	-The selected card function needs to be run as the card is moved, otherwise the "held" status is revoked
+
+
+
 -update "update board matrix" function
 -update "check board matrix" function
-
--Have cards data on the server
-	-Card X and Y pos
-	-Card grid X and Y pos
-
-
-
 
 
 

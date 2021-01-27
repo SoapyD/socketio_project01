@@ -210,7 +210,17 @@ exports.checkMessages = (io,namespace) => {
 		socket.on('requestGridSnapCard', (data) => {
 			//ADD IN SET SELECTED CARD FUNCTION HERE
 			queriesUtil.setSelectedCard(data)
-			.then((saved)=> {
+			.then((room)=> {
+				let old_data = data
+				let card = room.cards[old_data.cards_array_id];
+				
+				data = {
+					cards_array_id: old_data.cards_array_id
+					,card_x: card.x
+					,card_y: card.y	
+					,card_x_table_pos: card.x_table_pos
+					,card_y_table_pos: card.y_table_pos						
+				}
 				io.of(namespace).emit("GridSnapCard",data)				
 			})
 

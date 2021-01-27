@@ -27,9 +27,34 @@ exports.createRoom = (room_data, socket_id) => {
     let sockets = [];
     sockets.push(socket_id);
 
-    let decks = deckController.resetDecks();
-    let boardmatrix = deckController.setupBoardMatrix();
+	
+	let config = {
+		cardSize: 100
+		,handCardSize: 150
+		,largeCardSize: 200
+		,tableWidth: 7 //7
+		,tableHeight: 5 //5
+		,card_back: 15
 
+		,depth_card_table: 10
+		,depth_card_table_graphic: 15
+		,depth_card_hand: 20
+		,depth_card_held: 30
+
+		// game_state: 0,
+		// roomName: '',
+		// roomID: '',
+		// playerNumber: 0,
+		// currentPlayer: 0, //1
+		// last_card: -1,
+		// selected_card: -1,
+		// xPosUp: -1,
+		// yPosUp: -1
+	}	
+	
+    let decks = deckController.resetDecks();
+    let boardmatrix = deckController.setupBoardMatrix(config);	
+	
     return Room.create ({
         roomName: room_data.roomName
         ,password: room_data.password
@@ -38,7 +63,7 @@ exports.createRoom = (room_data, socket_id) => {
         ,sockets: sockets
 		
 		,max_players: 1//2
-		
+		,config: config
         ,decks: decks
         ,matrix: boardmatrix
     })
@@ -56,15 +81,29 @@ exports.setSelectedCard = (data) => {
             if (room){
 				room.selected_card = data.cards_array_id
 				
-				room.cards[data.cards_array_id] 
+	
+				let card = room.cards[data.cards_array_id] 				
+				
+				card.x = data.card_x
+				card.y = data.card_y				
+				
+				//SET THE ARD SNAPPING TO A GRID POSITION
+				card.x_table_pos = Math.floor(card.x / room.config.cardSize);
+				card.y_table_pos = Math.floor(card.y / room.config.cardSize);				
+				card.x = card.x_table_pos * room.config.cardSize + (room.config.cardSize / 2)
+				card.y = card.y_table_pos * room.config.cardSize + (room.config.cardSize / 2)				
+				
 
+				room.cards[data.cards_array_id] = card
+				
 				room.markModified('selected_card');
+				room.markModified('cards');
 				room.save((err, room)=>{
-					resolve(saved)
+					resolve(room)
 				})	
             }
 			else{
-				resolve(saved)
+				resolve(room)
 			}
         })
     })	

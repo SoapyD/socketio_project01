@@ -182,6 +182,7 @@ connFunctions.updateCards = (socket) => {
 				}
 			})									
 			
+			//NEED TO BE HERE SO THE ABOVE CODE DOEN'T RESET THE HELD STATUS OF THE CARD
             gameFunctions.config.selected_card = data.cards_array_id;
         })	
 		
@@ -244,18 +245,20 @@ connFunctions.updateCards = (socket) => {
 			
 			if(card.locked === false){
 				card.setScrollFactor(1); //make buttons scrollable
-				card.x_table_pos = Math.floor(card.x / gameFunctions.config.cardSize);
-				card.y_table_pos = Math.floor(card.y / gameFunctions.config.cardSize);				
-				card.x = card.x_table_pos * gameFunctions.config.cardSize + (gameFunctions.config.cardSize / 2)
-				card.y = card.y_table_pos * gameFunctions.config.cardSize + (gameFunctions.config.cardSize / 2)
+
+				card.x_table_pos = data.card_x_table_pos;
+				card.y_table_pos = data.card_y_table_pos;				
+				card.x = data.card_x;
+				card.y = data.card_y;			
 			}
 			card.depth = gameFunctions.config.depth_card_table;
+			gameFunctions.config.selected_card = data.cards_array_id;
         })		
 		
-        socket.on('PalmCard', (data) => {
-            let card = gameFunctions.cards[data.cards_array_id];
-            card.held = false;
-            gameFunctions.config.selected_card = -1;
+		socket.on('PalmCard', (data) => {
+			let card = gameFunctions.cards[data.cards_array_id];
+			card.held = false;
+			gameFunctions.config.selected_card = -1;
 
 
 			if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
@@ -266,9 +269,9 @@ connFunctions.updateCards = (socket) => {
 					duration: 500,
 					ease: 'Power3'
 				});    			
-            }
-            
-        })				
+			}
+
+		})				
 		
 			// socket.on('LockCard', (data) => {
 			// gameFunctions.checkCardLock(data.card_id);

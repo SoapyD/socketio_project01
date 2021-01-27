@@ -160,7 +160,7 @@ exports.resetDecks = () => {
 		
 		let deckCards = [];
 		for (let n = 0; n < 2; n++) { //Create 2 types of each card
-			for (let d = 0; d < 15; d++) { //generate the base 15 cards frome ach deck
+			for (let d = 0; d < 15; d++) { //generate the base 15 cards from each deck
 				deckCards.push(d);
 			}
 		}		
@@ -285,15 +285,15 @@ exports.checkTouching = (roomID, cards_array_id) => {
 // #     # #     #    #    #    #   #   #   #  
 // #     # #     #    #    #     # ### #     # 
 
-exports.setupBoardMatrix = () => {
+exports.setupBoardMatrix = (config) => {
 	
     let boardMatrix = [];
-    let tableHeight = 5;
-    let tableWidth = 7;
+    // let tableHeight = 5;
+    // let tableWidth = 7;
 
-    for (let y = 0; y < tableHeight ; y++) {
+    for (let y = 0; y < config.tableHeight ; y++) {
         let boardSegment = [];
-        for (let x = 0; x < tableWidth; x++) {
+        for (let x = 0; x < config.tableWidth; x++) {
             boardSegment.push({
                 deck_id: -1,
                 card_id: -1,
