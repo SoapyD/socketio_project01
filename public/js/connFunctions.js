@@ -273,9 +273,10 @@ connFunctions.updateCards = (socket) => {
 
 		})				
 		
-			// socket.on('LockCard', (data) => {
-			// gameFunctions.checkCardLock(data.card_id);
-			// })				
+		socket.on('LockCard', (data) => {
+			let card = gameFunctions.cards[data.cards_array_id];
+			card.locked = true
+		})				
 		
     }		
 } 
@@ -341,6 +342,7 @@ connFunctions.requestLockCard = () => {
 			let card = gameFunctions.cards[gameFunctions.config.selected_card];
 			//SEND OUT THE MOUSE MOVEMENT DATA
 			let data = {
+				roomID: gameFunctions.config.roomID,	
 				cards_array_id: card.id
 			}
 			socket.emit('requestLockCard', data)

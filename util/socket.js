@@ -231,9 +231,35 @@ exports.checkMessages = (io,namespace) => {
 		})		
 		
 		socket.on('requestLockCard', (data) => {
-			// io.of(namespace).emit("LockCard",data)
 			
-			// deckController.checkTouching(roomID, card_id)			
+// 			CHECK IF CARD IS TOUCHING LAST PLACED CARD
+			deckController.checkTouching(data)
+			.then((check_touching_data) => {
+				// console.log(return_data)
+				if (check_touching_data.room){
+					// IF LAST CARD DOESN'T EXIST (-1) OR CARD IS TOUCHING LAST CARD (1), CHECK BOARD MATRIX 					
+					if (check_touching_data.touching !== 0)
+					{
+						let pass_check = deckController.checkBoardMatrix(check_touching_data)
+						// console.log("Pass Check: "+pass_check)
+						
+						//IF NOT CLASHING BOARD MATRIX, UPDATE MATRIX AND LOCK CARD
+						if (pass_check === true){
+							
+							deckController.updateBoardMatrix(check_touching_data)
+							.then((complete) => {
+								console.log("locking card check: "+complete)
+								// io.of(namespace).emit("LockCard",data)
+							})
+							
+						}
+					}
+
+				}				
+				
+			})
+			
+
 		})									
 		
 	

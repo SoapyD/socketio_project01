@@ -217,61 +217,82 @@ exports.drawCard = (roomID, deck_id) => {
     })
 }
 
-exports.checkTouching = (roomID, cards_array_id) => {
+//CHECK TO SEE, IF THERE IS A LAST CARD, THAT THE CURRENT CARD IS TOUCHING IT
+exports.checkTouching = (data) => {
 	//GET CARD
 
-	//TOUCHING CHECK WITH LAST CARD
+    return new Promise(function(resolve,reject)
+    {	
+		//TOUCHING CHECK WITH LAST CARD
+		let return_data = {
+			touching: 0
+		} 
 
-	queriesUtil.findRoom(roomID)
-	.then((room) => {	
 
-		//
-		let card = room.cards[cards_array_id];
-		let last_card;
+		queriesUtil.findRoom(data.roomID)
+		.then((room) => {	
 
-		//CHECK IF POSITION IS NEXT TO LAST CARD
-		let touching = 0;
-		let touch_direction = -1; //touching direction between last and new card 
-		
-		/*
-		if(room.last_card !== -1) //if there is a last card
-		{
-			last_card = room.cards[room.last_card];
-			if (last_card.x_table_pos - 1 === card.x_table_pos || last_card.x_table_pos + 1 === card.x_table_pos){
-				if (last_card.y_table_pos === card.y_table_pos){
-					touching = 1;
+			if (room){		
+				//
 
-					if(card.x_table_pos < last_card.x_table_pos){
-						touch_direction = 3
+				let card = room.cards[data.cards_array_id];
+				return_data.card = card;
+				
+				let last_card;
+
+				//CHECK IF POSITION IS NEXT TO LAST CARD
+				let touch_direction = -1; //touching direction between last and new card 
+
+
+				if(room.last_card !== -1) //if there is a last card
+				{
+					last_card = room.cards[room.last_card];
+					return_data.last_card = last_card;
+					
+					if (last_card.x_table_pos - 1 === card.x_table_pos || last_card.x_table_pos + 1 === card.x_table_pos){
+						if (last_card.y_table_pos === card.y_table_pos){
+							return_data.touching = 1;
+
+							if(card.x_table_pos < last_card.x_table_pos){
+								touch_direction = 3
+							}
+							if(card.x_table_pos > last_card.x_table_pos){
+								touch_direction = 1
+							}				
+						}
 					}
-					if(card.x_table_pos > last_card.x_table_pos){
-						touch_direction = 1
-					}				
+
+					if (last_card.y_table_pos - 1 === card.y_table_pos || last_card.y_table_pos + 1 === card.y_table_pos){
+						if (last_card.x_table_pos === card.x_table_pos){
+							return_data.touching = 1;
+
+							if(card.y_table_pos < last_card.y_table_pos){
+								touch_direction = 0
+							}
+							if(card.y_table_pos > last_card.y_table_pos){
+								touch_direction = 2
+							}								
+						}
+					}		
+				}else{
+					return_data.touching = -1;
 				}
+
+				// console.log("touching: "+touching.toString())
+
+				// if (touching !== 0){
+				// 	//LOCK AND FLIP THE CARD
+				// }
+				return_data.touch_direction = touch_direction;
+				return_data.room = room;
+				
+				resolve(return_data)
 			}
-
-			if (last_card.y_table_pos - 1 === card.y_table_pos || last_card.y_table_pos + 1 === card.y_table_pos){
-				if (last_card.x_table_pos === card.x_table_pos){
-					touching = 1;
-
-					if(card.y_table_pos < last_card.y_table_pos){
-						touch_direction = 0
-					}
-					if(card.y_table_pos > last_card.y_table_pos){
-						touch_direction = 2
-					}								
-				}
-			}		
-		}else{
-			touching = -1;
-		}
-
-		console.log("touching: "+touching.toString())
-
-		if (touching !== 0){
-			//LOCK AND FLIP THE CARD
-		}
-		*/
+			else{
+				resolve(return_data);
+			}
+			/**/
+		})
 	})
 }
 
@@ -297,7 +318,7 @@ exports.setupBoardMatrix = (config) => {
             boardSegment.push({
                 deck_id: -1,
                 card_id: -1,
-                card_number: -1,
+                cards_array_id: -1,
                 orientation: -1
             });
         }
@@ -308,43 +329,53 @@ exports.setupBoardMatrix = (config) => {
 }
 
 exports.updateBoardMatrix = (data) => {
-	// console.log(data)
-	let pos = exports.findRoomInfo(data.roomName);
-	
-	if (pos !== -1){
-		let boardMatrix = exports.room_decks[pos].boardMatrix;
-		let board_part = boardMatrix[data.y_table_pos][data.x_table_pos];
-		board_part.deck_id = data.deck_id;
-		board_part.card_id = data.card_id;
-		board_part.card_number = data.card_number;		
-		board_part.orientation = data.orientation;	
-	}
+
+	return new Promise(function(resolve,reject)
+	{		
+		if (data.room){
+
+			// let boardMatrix = room.matrix;
+			let board_part = data.room.matrix[data.card.y_table_pos][data.card.x_table_pos];
+			board_part.deck_id = data.card.deck_id;
+			board_part.card_id = data.card.card_id;
+			board_part.cards_array_id = data.card.cards_array_id;		
+			board_part.orientation = data.card.orientation;		
+
+			data.room.matrix[data.card.y_table_pos][data.card.x_table_pos] = board_part;
+
+			data.room.markModified('matrix');
+			data.room.save((err, room)=>{
+				resolve(true)
+			})
+		}
+		else{
+			resolve(false)
+		}
+	})
 
 }
 
+//LOOP THROUGH THE BOARD MATRIX TO SEE IF THERE#S ANY CLASHES THERE
 exports.checkBoardMatrix = (data) => {
-	let pos = exports.findRoomInfo(data.roomName);
 	
-	if (pos !== -1){
-		let boardMatrix = exports.room_decks[pos].boardMatrix;
-		// let board_part = boardMatrix[data.y_table_pos][data.x_table_pos];
-		// let board_check_part;
-		// console.log(board_part)
+	let pass_check = true
+	
+	if (data.room){
 		
-		let check_data = {
-			pass_check: true
-			,roomName: data.roomName
-			,deck_id: data.deck_id
-			,card_id: data.card_id
-			,card_number: data.card_number
-			,orientation: data.orientation
-		};
+		let check_data;
+		// let check_data = {
+		// 	pass_check: true
+		// 	,roomName: data.roomName
+		// 	,deck_id: data.deck_id
+		// 	,card_id: data.card_id
+		// 	,card_number: data.card_number
+		// 	,orientation: data.orientation
+		// };
 		let touch_direction;
 		
 		for(let y=-1; y<=1;y++){
-			// console.log(y);
-			// if (y !== 0 && y + data.y_table_pos > 0 && y + data.y_table_pos < gameController.tableHeight){
-			if (y !== 0 && y + data.y_table_pos > 0 && y + data.y_table_pos < gameController.game_info.tableHeight)
+
+			if (y !== 0 && y + data.y_table_pos > 0 && y + data.y_table_pos < room.config.tableHeight)
 			{
 				board_check_part = boardMatrix[data.y_table_pos + y][data.x_table_pos];
 				if (board_check_part.deck_id !== -1){
@@ -352,23 +383,29 @@ exports.checkBoardMatrix = (data) => {
 					if (y > 0){
 						touch_direction = 0;
 					}
+					// check_data.touch_direction = touch_direction;
+					// check_data.last_deck_id = board_check_part.deck_id;
+					// check_data.last_card_id = board_check_part.card_id;
+					// check_data.last_card_number = board_check_part.card_number;
+					// check_data.last_orientation = board_check_part.orientation;
+					
+					// check_data.pass_check = true
+					check_data.card = data.card
+					check_data.board_card = board_check_part
 					check_data.touch_direction = touch_direction;
-					check_data.last_deck_id = board_check_part.deck_id;
-					check_data.last_card_id = board_check_part.card_id;
-					check_data.last_card_number = board_check_part.card_number;
-					check_data.last_orientation = board_check_part.orientation;
 				
 					check_data = exports.checkCardPlacement(check_data)
 					if( check_data.pass_check === false){
-						data.pass_check = false;
+						// data.pass_check = false;
+						pass_check = false;
 					}
 				}
 			}
 		}
 		for(let x=-1; x<=1;x++){
-			// console.log(x + data.x_table_pos);
-			if (x !== 0 && x + data.x_table_pos > 0 && x + data.x_table_pos < gameController.game_info.tableWidth){
-				// console.log("x:"+x.toString()+", y:"+data.y_table_pos.toString())	
+
+			if (x !== 0 && x + data.x_table_pos > 0 && x + data.x_table_pos < room.config.tableWidth){
+
 				board_check_part = boardMatrix[data.y_table_pos][data.x_table_pos + x];		
 				
 				if (board_check_part.deck_id !== -1){
@@ -376,24 +413,67 @@ exports.checkBoardMatrix = (data) => {
 					if (x > 0){
 						touch_direction = 3;
 					}	
-					check_data.touch_direction = touch_direction;
-					check_data.last_deck_id = board_check_part.deck_id;
-					check_data.last_card_id = board_check_part.card_id;
-					check_data.last_card_number = board_check_part.card_number;
-					check_data.last_orientation = board_check_part.orientation;
-				
+					// check_data.touch_direction = touch_direction;
+					// check_data.last_deck_id = board_check_part.deck_id;
+					// check_data.last_card_id = board_check_part.card_id;
+					// check_data.last_card_number = board_check_part.card_number;
+					// check_data.last_orientation = board_check_part.orientation;
+					
+					// check_data.pass_check = true
+					check_data.card = data.card
+					check_data.board_card = board_check_part
+					check_data.touch_direction = touch_direction;				
+					
 					check_data = exports.checkCardPlacement(check_data)
 					if( check_data.pass_check === false){
-						data.pass_check = false;
+						// data.pass_check = false;
+						pass_check = false;
 					}
 				}				
-				
-				
+								
 			}
 		}		
-	}	
+	}
+	
+	return pass_check
 }
 
+
+exports.checkCardPlacement = (data) => {
+	
+	let definedCards = exports.defineCards();
+	
+	let boardCardInfo = definedCards[data.board_card.deck_id][data.board_card.card_id];
+	let cardInfo = definedCards[data.card.deck_id][data.card.card_id];	
+	
+	let lastCardPos = (data.touch_direction - data.board_card.orientation)
+	if (lastCardPos < 0){
+		lastCardPos += 4;
+	}
+	let lastCardColour = boardCardInfo.colours[lastCardPos];
+
+	data.touch_direction = data.touch_direction + 2
+	if (data.touch_direction > 3){
+		data.touch_direction -= 4;
+	}
+
+	let CardPos = (data.touch_direction - data.card.orientation)
+	if (CardPos < 0){
+		CardPos += 4;
+	}		
+
+	let CardColour = cardInfo.colours[CardPos];
+
+	if (lastCardColour !== CardColour){
+		data.pass_check = false;
+	}	
+
+	console.log("Deck ID: "+data.deck_id.toString()+" | Card: "+CardColour+" - "+CardPos.toString()+" | Touch Dir: "+data.touch_direction.toString()+" | Orientation: "+data.orientation.toString())	
+	console.log("Last Deck ID: "+data.last_deck_id.toString()+" | LastCard: "+lastCardColour+" - "+lastCardPos.toString() + " | Type: "+boardCardInfo.type)	
+	
+	return data
+}
+		
 
 
 
@@ -433,42 +513,7 @@ exports.addPlayer = (roomName, playerName, playerNumber) => {
 
 
 
-exports.checkCardPlacement = (data) => {
-	
-	let pos = exports.findRoomInfo(data.roomName);
-	let definedCards = exports.room_decks[pos].definedCards;
-	
-	let lastCardInfo = definedCards[data.last_deck_id][data.last_card_number];
-	let cardInfo = definedCards[data.deck_id][data.card_number];		
-	
-	let lastCardPos = (data.touch_direction - data.last_orientation)
-	if (lastCardPos < 0){
-		lastCardPos += 4;
-	}
-	let lastCardColour = lastCardInfo.colours[lastCardPos];
 
-	data.touch_direction = data.touch_direction + 2
-	if (data.touch_direction > 3){
-		data.touch_direction -= 4;
-	}
-
-	let CardPos = (data.touch_direction - data.orientation)
-	if (CardPos < 0){
-		CardPos += 4;
-	}		
-
-	let CardColour = cardInfo.colours[CardPos];
-
-	if (lastCardColour !== CardColour){
-		data.pass_check = false;
-	}	
-
-	console.log("Deck ID: "+data.deck_id.toString()+" | Card: "+CardColour+" - "+CardPos.toString()+" | Touch Dir: "+data.touch_direction.toString()+" | Orientation: "+data.orientation.toString())	
-	console.log("Last Deck ID: "+data.last_deck_id.toString()+" | LastCard: "+lastCardColour+" - "+lastCardPos.toString() + " | Type: "+lastCardInfo.type)	
-	
-	return data
-}
-		
 
 
 

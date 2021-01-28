@@ -52,7 +52,7 @@ const roomSchema = new mongoose.Schema({
     ,matrix: [[{
         deck_id : Number,
         card_id : Number,
-        card_number : Number,
+        cards_array_id : Number,
         orientation : Number
     }]]    
 
