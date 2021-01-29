@@ -1,7 +1,8 @@
 gameFunctions.createCard = (data) => {
 
 	// let game = gameFunctions.game;
-	//LOAD A CARD SPRITE AND RESCALE IT
+    //LOAD A CARD SPRITE AND RESCALE IT
+
     let card = gameFunctions.game.add.sprite(gameFunctions.game.cameras.main.centerX, gameFunctions.game.cameras.main.centerY, data.card_type).setInteractive();
 	
 
@@ -122,7 +123,8 @@ gameFunctions.createCard = (data) => {
     card.scaleY = card.scaleX;	
 	card.orientation = 0;
 	card.x_table_pos = -1;
-	card.y_table_pos = -1;	
+    card.y_table_pos = -1;	
+    card.next_angle = 0;
 	
     card.owner = gameFunctions.config.currentPlayer;
 	card.type = "card";	
@@ -156,85 +158,12 @@ gameFunctions.createCard = (data) => {
 	if (gameFunctions.cards.length === 1)
 	{	
 		connFunctions.updateCards(socket)
-	}
+    }
+    
+    return card;
 }
 
 
-/*
-gameFunctions.checkCardLock = (card_id) => {
-	let card = gameFunctions.cards[card_id];
-	let last_card;
-	
-	//CHECK IF POSITION IS NEXT TO LAST CARD
-	let touching = 0;
-	let touch_direction = -1; //touching direction between last and new card 
-	if(gameFunctions.config.last_card !== -1) //if there is a last card
-	{
-		last_card = gameFunctions.cards[gameFunctions.config.last_card];
-		if (last_card.x_table_pos - 1 === card.x_table_pos || last_card.x_table_pos + 1 === card.x_table_pos){
-			if (last_card.y_table_pos === card.y_table_pos){
-				touching = 1;
-				
-				if(card.x_table_pos < last_card.x_table_pos){
-					touch_direction = 3
-				}
-				if(card.x_table_pos > last_card.x_table_pos){
-					touch_direction = 1
-				}				
-			}
-		}
-		// console.log("ypos: "+card.y_table_pos.toString() + " | id: "+card.id.toString())
-		// console.log(card)
-		if (last_card.y_table_pos - 1 === card.y_table_pos || last_card.y_table_pos + 1 === card.y_table_pos){
-			if (last_card.x_table_pos === card.x_table_pos){
-				touching = 1;
-				
-				if(card.y_table_pos < last_card.y_table_pos){
-					touch_direction = 0
-				}
-				if(card.y_table_pos > last_card.y_table_pos){
-					touch_direction = 2
-				}								
-			}
-		}		
-	}else{
-		touching = -1;
-	}
-	
-	console.log("touching: "+touching.toString())
-	
-	if (touching !== 0){
-		//LOCK AND FLIP THE CARD
-		
-		let data = {
-			roomName: gameFunctions.config.roomName
-			,touching: touching
-			,touch_direction: touch_direction
-			,roomName: gameFunctions.config.roomName
-			,pass_check: true		
-			//CARD INFO
-			,deck_id: card.deck_id
-			,card_id: card.id
-			,card_number: card.card_number
-			,x_table_pos: card.x_table_pos
-			,y_table_pos: card.y_table_pos
-			,orientation: card.orientation			
-		}
-		if (last_card){
-			//LAST CARD INFO
-			data.last_deck_id = last_card.deck_id
-			data.last_card_id = last_card.id
-			data.last_card_number = last_card.card_number
-			data.last_x_table_pos = last_card.x_table_pos
-			data.last_y_table_pos = last_card.y_table_pos
-			data.last_orientation = last_card.orientation			
-		}
-		
-		connFunctions.requestCheckBoard(data);	
-	}
-
-}
-*/
 
 gameFunctions.updateHandCards = () => {
 	gameFunctions.hand.forEach((cards_array_id, i) => {

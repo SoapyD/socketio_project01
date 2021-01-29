@@ -75,7 +75,14 @@ connFunctions.checkMessages = (socket) => {
     socket.on('roomInfo', (data) => {
 		gameFunctions.config.roomName = data.roomName
 		gameFunctions.config.roomID = data.roomID	
-		gameFunctions.config.playerNumber = data.playerNumber
+        gameFunctions.config.playerNumber = data.playerNumber
+        
+        if(data.type){
+            // console.log("rejoining")
+            // console.log(data.room)
+            gameFunctions.reloadGame(data.room)
+        }
+
 		
         const messages = document.querySelector('#messages'); 
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
@@ -188,15 +195,38 @@ connFunctions.updateCards = (socket) => {
 		
         socket.on('RotateCard', (data) => {
             let card = gameFunctions.cards[data.cards_array_id];
-            let next_angle = card.angle;
-			if(card.locked === false){
+            
+            
+			if(card.locked === false && card.next_angle === card.angle){
                 // card.angle += 90;
-                next_angle += 90
+
+                card.next_angle += 90
+                if (card.next_angle >= 180){
+                    card.next_angle = -180
+                }
+
+                switch(card.next_angle) {
+                    case 0:
+                        card.orientation = 0; //0
+                        break;
+                    case 90:
+                        card.orientation = 1; //90
+                        break;	
+                    case -180:
+                        card.orientation = 2; //180
+                        break;
+                    case -90:
+                        card.orientation = 3; //270
+                        break;				
+                    default:
+                }
+                // console.log(card.next_angle);
+                // console.log(card.orientation);
 
                 //Add TWEEN
 				gameFunctions.game.tweens.add({
 					targets: card,
-					angle: next_angle,
+					angle: card.angle + 90,
 					duration: 500,
 					ease: 'Power3'
 				});    	
@@ -204,21 +234,6 @@ connFunctions.updateCards = (socket) => {
                 
 			}
 			
-			switch(next_angle) {
-				case 0:
-					card.orientation = 0; //0
-					break;
-				case 90:
-					card.orientation = 1; //90
-					break;	
-				case -180:
-					card.orientation = 2; //180
-					break;
-				case -90:
-					card.orientation = 3; //270
-					break;				
-				default:
-			}
         })	
 		
         socket.on('SizeCard', (data) => {

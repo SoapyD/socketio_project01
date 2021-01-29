@@ -235,3 +235,58 @@ gameFunctions.setupButtons = () => {
 		gameFunctions.buttonPress(btn, btn.clickAction, btn.callbackParams);                    
 	})				
 }
+
+
+// ######  #######  #####  ####### #######  #####  
+// #     # #       #     # #          #    #     # 
+// #     # #       #       #          #    #       
+// ######  #####    #####  #####      #     #####  
+// #   #   #             # #          #          # 
+// #    #  #       #     # #          #    #     # 
+// #     # #######  #####  #######    #     #####  
+
+
+gameFunctions.reloadGame = (room) => {
+
+    let data;
+    let card;
+
+    gameFunctions.config.last_card = room.last_card
+
+    if(room.cards){
+        room.cards.forEach((card, i) => {
+
+            // console.log(card)
+            data = {
+                deck_id: card.deck_id
+                ,card_id: card.card_id
+                ,card_type: card.card_type
+            }
+
+            created_card = gameFunctions.createCard(data);
+            if (card.locked === true)
+            {
+                created_card.locked = true
+                created_card.held = false
+                created_card.x_table_pos = card.x_table_pos;
+                created_card.y_table_pos = card.y_table_pos;	 
+                created_card.x = card.x;
+                created_card.y = card.y;
+                
+                created_card.setScrollFactor(1);
+                created_card.setFrame(created_card.card_id);
+
+                //REMOVE THE CARD FROM THE HAND
+                gameFunctions.hand.forEach((h_card_id, i, object) => {
+                    if(h_card_id === created_card.id){	
+                        object.splice(i, 1);
+                    }
+                })	                
+
+                // console.log(card)
+                // console.log(created_card)                              
+            }
+        })
+    }
+
+}

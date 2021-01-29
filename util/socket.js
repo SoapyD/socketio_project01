@@ -46,12 +46,6 @@ exports.checkMessages = (io,namespace) => {
 
 					queriesUtil.createRoom(data, socket.id)
 					.then((room) => {
-						// console.log(room);
-						// io.to(socket.id).emit('roomInfo', data);
-						// io.in(roomName).emit('roomMessage', data);
-						
-						// io.to(socket.id).emit('MessageFromServer', 'Room Created!');
-						// console.log(room._id)
 						
 						let return_data = {
 							userName: data.userName
@@ -96,7 +90,9 @@ exports.checkMessages = (io,namespace) => {
 									userName: data.userName
 									,roomName: data.roomName
 									,roomID: room._id
-									,playerNumber: room.users.indexOf(data.userID)
+                                    ,playerNumber: room.users.indexOf(data.userID)
+                                    ,room: room
+                                    ,type: 'rejoining'
 								}
 								//send room info back to socket
 								io.to(socket.id).emit('roomInfo', return_data);				
@@ -182,7 +178,7 @@ exports.checkMessages = (io,namespace) => {
 			if (data.roomID !== '')
 			{
                 // let card_number = deckController.drawCard(data.roomID, data.deck_id);
-                deckController.drawCard(data.roomID, data.deck_id)
+                deckController.drawCard(data) //data.roomID, data.deck_id
                 .then((card_id) =>{
                     // let card_number = 0
 					if (card_id >= 0){

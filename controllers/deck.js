@@ -175,28 +175,29 @@ exports.getRandomInt = (max) => {
 }
 
 
-exports.drawCard = (roomID, deck_id) => {
+exports.drawCard = (data) => {
     
 // 	SETUP a promise that we need to resolve before the function returns anything
     return new Promise(function(resolve,reject)
     {
         let card_id = -1;
 
-        queriesUtil.findRoom(roomID)
+        queriesUtil.findRoom(data.roomID)
         .then((room) => {
     
             if (room){
-                let deck = room.decks[deck_id];
+                let deck = room.decks[data.deck_id];
                 if(deck.length > 0)
                 {
                     let rand = exports.getRandomInt(deck.length);
                     card_id = deck[rand];
                     deck.splice(rand, 1);
-                    room.decks[deck_id] = deck;
+                    room.decks[data.deck_id] = deck;
 
 					room.cards.push({
-						deck_id: deck_id
-						,card_id: card_id
+						deck_id: data.deck_id
+                        ,card_id: card_id
+                        ,card_type: data.card_type
 					})
 
 					room.markModified('decks');
@@ -342,10 +343,13 @@ exports.updateBoardMatrix = (data) => {
 			board_part.orientation = data.orientation;		
 
 			data.room.matrix[data.card.y_table_pos][data.card.x_table_pos] = board_part;
-			data.room.last_card = data.cards_array_id;
+            data.room.last_card = data.cards_array_id;
+            
+            data.room.cards[data.cards_array_id].locked = true;
 
 			data.room.markModified('matrix');
-			data.room.markModified('last_card');
+            data.room.markModified('last_card');
+            data.room.markModified('cards');
 			data.room.save((err, room)=>{
 				resolve(true)
 			})
@@ -354,7 +358,6 @@ exports.updateBoardMatrix = (data) => {
 			resolve(false)
 		}
 	})
-
 }
 
 //LOOP THROUGH THE BOARD MATRIX TO SEE IF THERE#S ANY CLASHES THERE
@@ -366,17 +369,11 @@ exports.checkBoardMatrix = (data) => {
 		
 		let check_data = data;
 		let boardMatrix = data.room.matrix;
-		// let check_data = {
-		// 	pass_check: true
-		// 	,roomName: data.roomName
-		// 	,deck_id: data.deck_id
-		// 	,card_id: data.card_id
-		// 	,card_number: data.card_number
-		// 	,orientation: data.orientation
-		// };
 		let touch_direction;
 		let board_check_part;
-		
+        
+        
+        //CHECK MATRIX PARTS ABOVE AND BELOW CURRENT CARD
 		for(let y=-1; y<=1;y++){
 
 			if (y !== 0 && y + data.card.y_table_pos > 0 && y + data.card.y_table_pos < data.room.config.tableHeight)
@@ -398,7 +395,9 @@ exports.checkBoardMatrix = (data) => {
 					}
 				}
 			}
-		}
+        }
+        
+        //CHECK MATRIX PARTS LEFT AND RIGHT OF CURRENT CARD
 		for(let x=-1; x<=1;x++){
 
 			if (x !== 0 && x + data.card.x_table_pos > 0 && x + data.card.x_table_pos < data.room.config.tableWidth){
@@ -432,16 +431,19 @@ exports.checkBoardMatrix = (data) => {
 exports.checkCardPlacement = (data) => {
 	
 	let definedCards = exports.defineCards();
-	
+    
+    //GET THE CARD INFO FOR THE CARD AND BOARD SECTION
 	let boardCardInfo = definedCards[data.board_card.deck_id][data.board_card.card_id];
 	let cardInfo = definedCards[data.card.deck_id][data.card.card_id];	
-	
+    
+    //GET THE BOARD SECTION TOUCHING POSTION AND RELATED COLOUR
 	let lastCardPos = (data.touch_direction - data.board_card.orientation)
 	if (lastCardPos < 0){
 		lastCardPos += 4;
 	}
 	let lastCardColour = boardCardInfo.colours[lastCardPos];
 
+    //GET THE CARD TOUCHING POSITION AND RELATED COLOUR
 	data.touch_direction = data.touch_direction + 2
 	if (data.touch_direction > 3){
 		data.touch_direction -= 4;
@@ -454,6 +456,7 @@ exports.checkCardPlacement = (data) => {
 
 	let CardColour = cardInfo.colours[CardPos];
 
+    //IF CARD COLOURS DON'T MATCH, REJECT CHECK
 	if (lastCardColour !== CardColour){
 		data.pass_check = false;
 	}	

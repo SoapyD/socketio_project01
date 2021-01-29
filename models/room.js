@@ -39,7 +39,9 @@ const roomSchema = new mongoose.Schema({
 	
 	,cards: [{
 		deck_id: Number
-		,card_id: Number
+        ,card_id: Number
+        ,card_type: String
+        ,locked: Boolean
 		,x: {type: Number, default: 0}
 		,y: {type: Number, default: 0}		
 		,x_table_pos: {type: Number, default: 0}
