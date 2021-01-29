@@ -339,7 +339,7 @@ exports.updateBoardMatrix = (data) => {
 			board_part.deck_id = data.card.deck_id;
 			board_part.card_id = data.card.card_id;
 			board_part.cards_array_id = data.cards_array_id;		
-			board_part.orientation = data.card_orientation;		
+			board_part.orientation = data.orientation;		
 
 			data.room.matrix[data.card.y_table_pos][data.card.x_table_pos] = board_part;
 			data.room.last_card = data.cards_array_id;
@@ -379,9 +379,9 @@ exports.checkBoardMatrix = (data) => {
 		
 		for(let y=-1; y<=1;y++){
 
-			if (y !== 0 && y + data.y_table_pos > 0 && y + data.y_table_pos < room.config.tableHeight)
+			if (y !== 0 && y + data.card.y_table_pos > 0 && y + data.card.y_table_pos < data.room.config.tableHeight)
 			{
-				board_check_part = boardMatrix[data.y_table_pos + y][data.x_table_pos];
+				board_check_part = boardMatrix[data.card.y_table_pos + y][data.card.x_table_pos];
 				if (board_check_part.deck_id !== -1){
 					touch_direction = 2;
 					if (y > 0){
@@ -401,9 +401,9 @@ exports.checkBoardMatrix = (data) => {
 		}
 		for(let x=-1; x<=1;x++){
 
-			if (x !== 0 && x + data.x_table_pos > 0 && x + data.x_table_pos < room.config.tableWidth){
+			if (x !== 0 && x + data.card.x_table_pos > 0 && x + data.card.x_table_pos < data.room.config.tableWidth){
 
-				board_check_part = boardMatrix[data.y_table_pos][data.x_table_pos + x];		
+				board_check_part = boardMatrix[data.card.y_table_pos][data.card.x_table_pos + x];		
 				
 				if (board_check_part.deck_id !== -1){
 					touch_direction = 1;
@@ -458,8 +458,17 @@ exports.checkCardPlacement = (data) => {
 		data.pass_check = false;
 	}	
 
-	console.log("Deck ID: "+data.deck_id.toString()+" | Card: "+CardColour+" - "+CardPos.toString()+" | Touch Dir: "+data.touch_direction.toString()+" | Orientation: "+data.orientation.toString())	
-	console.log("Last Deck ID: "+data.last_deck_id.toString()+" | LastCard: "+lastCardColour+" - "+lastCardPos.toString() + " | Type: "+boardCardInfo.type)	
+	console.log(
+        "Deck ID: "+data.card.deck_id.toString()
+        +" | Card: "+CardColour+" - "+CardPos.toString()
+        +" | Touch Dir: "+data.touch_direction.toString()
+        +" | Orientation: "+data.orientation.toString()
+        )	
+	console.log(
+        "Last Deck ID: "+data.board_card.deck_id.toString()
+        +" | LastCard: "+lastCardColour+" - "
+        +lastCardPos.toString()
+        +" | Type: "+boardCardInfo.type)	
 	
 	return data
 }

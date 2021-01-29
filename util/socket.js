@@ -243,13 +243,14 @@ exports.checkMessages = (io,namespace) => {
 					if (check_touching_data.touching !== 0)
 					{
 						let pass_check = deckController.checkBoardMatrix(check_touching_data)
-						
+                        
+                        console.log("locking card check: "+pass_check)
 						//IF NOT CLASHING BOARD MATRIX, UPDATE MATRIX AND LOCK CARD
 						if (pass_check === true){
 							
 							deckController.updateBoardMatrix(check_touching_data)
 							.then((complete) => {
-								console.log("locking card check: "+complete)
+								// console.log("locking card check: "+complete)
 								if (complete === true){
 									io.of(namespace).emit("LockCard",data)
 								}
