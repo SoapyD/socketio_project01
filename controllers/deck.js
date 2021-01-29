@@ -224,9 +224,8 @@ exports.checkTouching = (data) => {
     return new Promise(function(resolve,reject)
     {	
 		//TOUCHING CHECK WITH LAST CARD
-		let return_data = {
-			touching: 0
-		} 
+		let return_data = data
+		return_data.touching = 0
 
 
 		queriesUtil.findRoom(data.roomID)
@@ -335,15 +334,18 @@ exports.updateBoardMatrix = (data) => {
 		if (data.room){
 
 			// let boardMatrix = room.matrix;
+			// console.log(data)
 			let board_part = data.room.matrix[data.card.y_table_pos][data.card.x_table_pos];
 			board_part.deck_id = data.card.deck_id;
 			board_part.card_id = data.card.card_id;
-			board_part.cards_array_id = data.card.cards_array_id;		
-			board_part.orientation = data.card.orientation;		
+			board_part.cards_array_id = data.cards_array_id;		
+			board_part.orientation = data.card_orientation;		
 
 			data.room.matrix[data.card.y_table_pos][data.card.x_table_pos] = board_part;
+			data.room.last_card = data.cards_array_id;
 
 			data.room.markModified('matrix');
+			data.room.markModified('last_card');
 			data.room.save((err, room)=>{
 				resolve(true)
 			})
@@ -362,7 +364,8 @@ exports.checkBoardMatrix = (data) => {
 	
 	if (data.room){
 		
-		let check_data;
+		let check_data = data;
+		let boardMatrix = data.room.matrix;
 		// let check_data = {
 		// 	pass_check: true
 		// 	,roomName: data.roomName
@@ -372,6 +375,7 @@ exports.checkBoardMatrix = (data) => {
 		// 	,orientation: data.orientation
 		// };
 		let touch_direction;
+		let board_check_part;
 		
 		for(let y=-1; y<=1;y++){
 
@@ -383,14 +387,7 @@ exports.checkBoardMatrix = (data) => {
 					if (y > 0){
 						touch_direction = 0;
 					}
-					// check_data.touch_direction = touch_direction;
-					// check_data.last_deck_id = board_check_part.deck_id;
-					// check_data.last_card_id = board_check_part.card_id;
-					// check_data.last_card_number = board_check_part.card_number;
-					// check_data.last_orientation = board_check_part.orientation;
-					
-					// check_data.pass_check = true
-					check_data.card = data.card
+
 					check_data.board_card = board_check_part
 					check_data.touch_direction = touch_direction;
 				
@@ -413,14 +410,7 @@ exports.checkBoardMatrix = (data) => {
 					if (x > 0){
 						touch_direction = 3;
 					}	
-					// check_data.touch_direction = touch_direction;
-					// check_data.last_deck_id = board_check_part.deck_id;
-					// check_data.last_card_id = board_check_part.card_id;
-					// check_data.last_card_number = board_check_part.card_number;
-					// check_data.last_orientation = board_check_part.orientation;
-					
-					// check_data.pass_check = true
-					check_data.card = data.card
+
 					check_data.board_card = board_check_part
 					check_data.touch_direction = touch_direction;				
 					
@@ -457,7 +447,7 @@ exports.checkCardPlacement = (data) => {
 		data.touch_direction -= 4;
 	}
 
-	let CardPos = (data.touch_direction - data.card.orientation)
+	let CardPos = (data.touch_direction - data.orientation)
 	if (CardPos < 0){
 		CardPos += 4;
 	}		

@@ -275,7 +275,23 @@ connFunctions.updateCards = (socket) => {
 		
 		socket.on('LockCard', (data) => {
 			let card = gameFunctions.cards[data.cards_array_id];
-			card.locked = true
+			
+			// gameFunctions.config.last_card = data.cards_array_id
+			card.locked = true;
+			card.setScrollFactor(1);
+			card.setFrame(card.card_id);
+
+			//REMOVE THE CARD FROM THE HAND
+			gameFunctions.hand.forEach((h_card_id, i, object) => {
+				if(h_card_id === card.id){	
+					object.splice(i, 1);
+				}
+			})	
+			
+			gameFunctions.config.last_card = card.id;
+			
+			// gameFunctions.game.cameras.main.scrollX = card.x - ((gameFunctions.tableWidth * gameFunctions.cardSize) / 2);
+			// gameFunctions.game.cameras.main.scrollY = card.y - ((gameFunctions.tableHeight * gameFunctions.cardSize) / 2);							
 		})				
 		
     }		
@@ -342,8 +358,9 @@ connFunctions.requestLockCard = () => {
 			let card = gameFunctions.cards[gameFunctions.config.selected_card];
 			//SEND OUT THE MOUSE MOVEMENT DATA
 			let data = {
-				roomID: gameFunctions.config.roomID,	
-				cards_array_id: card.id
+				roomID: gameFunctions.config.roomID	
+				,cards_array_id: card.id
+				,card_orientation: card.orientation
 			}
 			socket.emit('requestLockCard', data)
 		}

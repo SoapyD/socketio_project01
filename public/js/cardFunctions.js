@@ -77,7 +77,8 @@ gameFunctions.createCard = (data) => {
 		if (pointer.rightButtonReleased())
         {
 			let data = {
-				cards_array_id: card.id
+				roomID: gameFunctions.config.roomID
+				,cards_array_id: card.id
 			}			
 			connFunctions.requestRotateCard(socket, data) 
 		}
@@ -103,14 +104,14 @@ gameFunctions.createCard = (data) => {
 	
 	// let card_number = deckFunctions.drawCard(data.deck_id);
 	card.deck_id = data.deck_id;
-	card.card_number = data.card_number;
+	card.card_id = data.card_id;
 	//IF CURRENT PLAYER THEN LOAD FRONT OF CARD, ELSE LOAD CARD BACK
 	// console.log(gameFunctions.config.playerNumber)
 	// console.log(gameFunctions.config.currentPlayer)
 	if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
 	{	
 		// console.log("card no: "+String(card.card_number))
-		card.setFrame(card.card_number);
+		card.setFrame(card.card_id);
 	}
 	else {
 		// console.log("card back: "+String(gameFunctions.card_back))
