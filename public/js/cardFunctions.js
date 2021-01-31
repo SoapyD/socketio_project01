@@ -80,6 +80,7 @@ gameFunctions.createCard = (data) => {
 			let data = {
 				roomID: gameFunctions.config.roomID
 				,cards_array_id: card.id
+				,angle: card.angle
 			}			
 			connFunctions.requestRotateCard(socket, data) 
 		}
@@ -124,7 +125,7 @@ gameFunctions.createCard = (data) => {
 	card.orientation = 0;
 	card.x_table_pos = -1;
     card.y_table_pos = -1;	
-    card.next_angle = 0;
+    // card.next_angle = 0;
 	
     card.owner = gameFunctions.config.currentPlayer;
 	card.type = "card";	
@@ -193,6 +194,7 @@ gameFunctions.updateCardGraphics = () => {
 
 		if (card.id === gameFunctions.config.last_card
 		   && card.graphic.visible === false){
+			// console.log("triggered")
 			card.graphic.visible = true;
 			card.graphic.alpha = 0;
 

@@ -272,6 +272,10 @@ gameFunctions.reloadGame = (room) => {
                 created_card.y_table_pos = card.y_table_pos;	 
                 created_card.x = card.x;
                 created_card.y = card.y;
+				created_card.depth = gameFunctions.config.depth_card_table
+				
+				created_card.angle = card.angle;
+				created_card.orientation = card.orientation;
                 
                 created_card.setScrollFactor(1);
                 created_card.setFrame(created_card.card_id);

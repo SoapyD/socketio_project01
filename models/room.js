@@ -42,6 +42,8 @@ const roomSchema = new mongoose.Schema({
         ,card_id: Number
         ,card_type: String
         ,locked: Boolean
+		,angle: {type: Number, default: 0}
+		,orientation: {type: Number, default: 0}		
 		,x: {type: Number, default: 0}
 		,y: {type: Number, default: 0}		
 		,x_table_pos: {type: Number, default: 0}

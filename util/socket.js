@@ -196,7 +196,47 @@ exports.checkMessages = (io,namespace) => {
 		})	
 
 		socket.on('requestRotateCard', (data) => {
-			io.of(namespace).emit("RotateCard",data)
+
+			queriesUtil.findRoom(data.roomID)
+			.then((room) => {
+				
+				let card = room.cards[data.cards_array_id];
+				
+				if (card.angle === data.angle){
+
+					card.angle += 90
+					if (card.angle >= 180){
+						card.angle = -180
+					}
+
+					switch(card.angle) {
+						case 0:
+							card.orientation = 0; //0
+							break;
+						case 90:
+							card.orientation = 1; //90
+							break;	
+						case -180:
+							card.orientation = 2; //180
+							break;
+						case -90:
+							card.orientation = 3; //270
+							break;				
+						default:
+					}
+
+					data.angle = card.angle;
+					data.orientation = card.orientation;
+
+					room.cards[data.cards_array_id] = card;
+					room.markModified('cards');
+					room.save((err, room)=>{
+						io.of(namespace).emit("RotateCard",data)
+					})						
+					
+				}
+
+			})
 		})			
 
 		socket.on('requestSizeCard', (data) => {

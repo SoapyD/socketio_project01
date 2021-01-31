@@ -7,15 +7,20 @@
 
 SERVER SOCKET FUNCTIONS
 //////////////////////////////////////////////////////////////////////
--Have the rotate function calculate on the server and save the orientation onto the card list there
--
+
 
 
 DECK
 //////////////////////////////////////////////////////////////////////
--Need to add in "card_arr_pos" to cards array on server
--Need to add "card orientation" to cards array
 
+
+
+RELOAD
+//////////////////////////////////////////////////////////////////////
+-DONE -Fix the "last card" not flashing when the game is rejoined
+-DONE -Load card angle, orientation, position and load status
+
+-load current player, live and armour totals
 
 
 TWEENS
@@ -65,6 +70,11 @@ DONE
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+-DONE -Have the rotate function calculate on the server and save the orientation onto the card list there
+
+-DONE -Need to add in "card_arr_pos" to cards array on server
+-DONE -Need to add "card orientation" to cards array
 
 -DONE -When max player is set to 1 and the player leaves and reenters room, they can't draw any cards
 	-DONE -The problem comes from the "room info" request appearing after the game "start message" so when the create card buttons are made, they don't set with the correct room info.	Fixed by assigning the adding the room name and id when the connection function is run, instead of pre-loading the values.

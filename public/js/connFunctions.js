@@ -3,8 +3,8 @@
 // const address = 'http://localhost:3000/admin';
 
 
-// const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
-const address = 'http://localhost:3000';
+const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
+// const address = 'http://localhost:3000';
 const socket = io(address)
 
 $('#message-input').slideUp(0);
@@ -196,43 +196,15 @@ connFunctions.updateCards = (socket) => {
         socket.on('RotateCard', (data) => {
             let card = gameFunctions.cards[data.cards_array_id];
             
-            
-			if(card.locked === false && card.next_angle === card.angle){
-                // card.angle += 90;
+			card.orientation = data.orientation;
 
-                card.next_angle += 90
-                if (card.next_angle >= 180){
-                    card.next_angle = -180
-                }
-
-                switch(card.next_angle) {
-                    case 0:
-                        card.orientation = 0; //0
-                        break;
-                    case 90:
-                        card.orientation = 1; //90
-                        break;	
-                    case -180:
-                        card.orientation = 2; //180
-                        break;
-                    case -90:
-                        card.orientation = 3; //270
-                        break;				
-                    default:
-                }
-                // console.log(card.next_angle);
-                // console.log(card.orientation);
-
-                //Add TWEEN
-				gameFunctions.game.tweens.add({
-					targets: card,
-					angle: card.angle + 90,
-					duration: 500,
-					ease: 'Power3'
-				});    	
-
-                
-			}
+			//Add TWEEN
+			gameFunctions.game.tweens.add({
+				targets: card,
+				angle: card.angle + 90,
+				duration: 500,
+				ease: 'Power3'
+			});    	
 			
         })	
 		
