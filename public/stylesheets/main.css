@@ -36,6 +36,9 @@
 .sidebar {
     border: 1px black dotted;
     height: 65vh;
+    /* position:absolute; */
+    /* display: flex;
+    flex-wrap: wrap; */
     padding: 0;
 }
 

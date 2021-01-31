@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- <link rel="stylesheet" href="css/style.css"> -->
+</head>
+<body>
+
+	<!--
+	has issues applying these in time if it's an external file 		 
+	-->
+	<style>
+		.btn-group{
+			width:100%;
+		}
+		input {
+			width: 48%;
+			height: 35px;
+			display: inline;
+		}
+		.tag {
+			width:100%;
+		}
+		#messages{
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		#messages li {
+			padding: 5px 10px;
+		}
+		#messages li:nth-child(odd){
+			background: #eee
+		}
+
+		.box {
+			width: 400px;
+		}
+		#start-button {
+            float: right;
+            display: none;
+		}		
+		#messages {
+			background: white;
+		}
+		
+	</style>
+
+	
+	<div class="box">
+		<div>
+			<input id="user-name" class="tag" type="text" placeholder="Username">
+		</div>
+		<div>
+			<input id="room-name" class="tag" type="text" placeholder="Room Name">
+		</div>
+		
+		<div class="btn-group">
+			<input name="join-room" class="btn btn-primary" type="submit" value="Join">
+			</input>
+			<input name="start-game" class="btn btn-primary" id="start-button" type="submit" value="Start">
+			</input>
+		</div>
+	
+		<ul id="messages">
+		</ul> 		
+	</div>
+
+	
+	<!-- <script src="/socket.io/socket.io.js"></script>
+	<script src="js/script.js"></script> -->
+
+	<!-- <script>connFunctions.checkConnection(socket)</script>	 -->
+	
+</body>
+</html>

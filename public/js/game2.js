@@ -12,13 +12,14 @@ var config = {
             gravity: { y: 200 }
         }
     },
-    scene: {
-        preload: preload,
-        create: create
-    },
+    // scene: {
+    //     preload: preload,
+    //     create: create
+    // },
     scale: {
         parent: 'gameContainer',  
         mode: Phaser.Scale.FIT,
+        // mode: Phaser.DOM.FIT,
         // autoCenter: Phaser.Scale.AUTO,
       },
       scene: {
@@ -53,7 +54,9 @@ function preload ()
 	// this.load.html('nameform', 'setup2.html');
 	
 	this.load.spritesheet("buttons", "./img/buttons3.jpg", 
-	 { frameWidth: 100, frameHeight: 50, endFrame: 3 });	
+     { frameWidth: 100, frameHeight: 50, endFrame: 3 });	
+     
+     this.load.html('nameform', './html/setup.html');     
 }
 
 var element;
@@ -75,33 +78,47 @@ function create ()
 		0x00b9f2).setAltFillStyle(0x016fce).setOutlineStyle(0x000000);
 
 
-		//Create a camera controller using the arraow keys
-		var cursors = this.input.keyboard.createCursorKeys();
+    //Create a camera controller using the arraow keys
+    var cursors = this.input.keyboard.createCursorKeys();
 
-		var controlConfig = {
-			camera: this.cameras.main,
-			left: cursors.left,
-			right: cursors.right,
-			up: cursors.up,
-			down: cursors.down,
-			acceleration: 0.04,
-			drag: 0.0005,
-			maxSpeed: 0.7
-		};
-	
-		controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-	
-		this.cameras.main.setBounds(
-			-gameFunctions.config.cardSize, 
-			-gameFunctions.config.cardSize, 
-			config.width + (gameFunctions.config.cardSize * 2), 
-			config.height + (gameFunctions.config.cardSize * 2));
+    var controlConfig = {
+        camera: this.cameras.main,
+        left: cursors.left,
+        right: cursors.right,
+        up: cursors.up,
+        down: cursors.down,
+        acceleration: 0.04,
+        drag: 0.0005,
+        maxSpeed: 0.7
+    };
+
+    controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+
+    this.cameras.main.setBounds(
+        -gameFunctions.config.cardSize, 
+        -gameFunctions.config.cardSize, 
+        config.width + (gameFunctions.config.cardSize * 2), 
+        config.height + (gameFunctions.config.cardSize * 2));
+
+    
+
+    element = this.add.dom(this.cameras.main.centerX, y_origin).createFromCache('nameform');
+
+    this.tweens.add({
+        targets: element,
+        y: this.cameras.main.centerY,
+        duration: 2000,
+        ease: 'Power3'
+    });       
+
+
 
 }
 
 function update (time, delta)
 {
-	controls.update(delta);
+    controls.update(delta);
+
 	// console.log("loop")
 	switch( gameFunctions.config.game_state) {
 		case 0:
