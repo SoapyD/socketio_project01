@@ -21,50 +21,43 @@
 		.tag {
 			width:100%;
 		}
-		#messages{
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-		}
-		#messages li {
-			padding: 5px 10px;
-		}
-		#messages li:nth-child(odd){
-			background: #eee
-		}
+		.disable-select {
+			user-select: none; /* supported by Chrome and Opera */
+		   -webkit-user-select: none; /* Safari */
+		   -khtml-user-select: none; /* Konqueror HTML */
+		   -moz-user-select: none; /* Firefox */
+		   -ms-user-select: none; /* Internet Explorer/Edge */
+		}		
 
+		select {
+			width: 100%;
+			height: 30px;
+		}
+		
 		.box {
 			width: 400px;
-		}
-		#start-button {
-            float: right;
-            display: none;
-		}		
-		#messages {
-			background: white;
 		}
 		
 	</style>
 
 	
 	<div class="box">
-		<div>
-			<input id="user-name" class="tag" type="text" placeholder="Username">
-		</div>
-		<div>
-			<input id="room-name" class="tag" type="text" placeholder="Room Name">
-		</div>
+		
+		<select name="characters" id="character-select">
+			<option value="">--Please choose an option--</option>
+			<option value="1">Character 1</option>
+			<option value="2">Character 2</option>
+		</select>		
+		
 		
 		<div class="btn-group">
-			<input name="join-room" class="btn btn-primary" type="submit" value="Join">
-			</input>
-			<input name="start-game" class="btn btn-primary" id="start-button" type="submit" value="Start">
+			<input name="start" class="btn btn-primary" type="submit">
 			</input>
 		</div>
 	
-		<ul id="messages">
 		</ul> 		
 	</div>
+
 
 	
 	<!-- <script src="/socket.io/socket.io.js"></script>

@@ -16,8 +16,14 @@ var config = {
     //     preload: preload,
     //     create: create
     // },
+	
+	parent: 'gameContainer',
+    dom: {
+        createContainer: true
+    },	
+	
     scale: {
-        parent: 'gameContainer',  
+          
         mode: Phaser.Scale.FIT,
         // mode: Phaser.DOM.FIT,
         // autoCenter: Phaser.Scale.AUTO,
@@ -103,13 +109,39 @@ function create ()
     
 
     element = this.add.dom(this.cameras.main.centerX, y_origin).createFromCache('nameform');
-
-    this.tweens.add({
-        targets: element,
-        y: this.cameras.main.centerY,
-        duration: 2000,
-        ease: 'Power3'
-    });       
+	element.setPerspective(800);
+	element.setAlpha(0)
+	element.addListener('click');
+	
+	element.on('click', function (event) {
+        if (event.target.name === 'start')
+        {
+            var character = this.getChildByName('characters');
+			console.log(character.value)
+			
+			this.scene.tweens.add({
+			targets: element,
+			// y: this.cameras.main.centerY,
+			alpha: 0,
+			duration: 500,
+			ease: 'Power3',
+			onComplete: function ()
+			{
+				element.setVisible(false);
+			}
+			});       			
+			
+		}
+	})
+	
+	
+	this.tweens.add({
+	targets: element,
+	// y: this.cameras.main.centerY,
+	alpha: 1,
+	duration: 500,
+	ease: 'Power3'
+	});       
 
 
 
