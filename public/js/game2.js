@@ -36,6 +36,8 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+var character_form;
+
 
 function preload ()
 {
@@ -56,16 +58,15 @@ function preload ()
 	this.load.spritesheet("c2", "./img/cards/c2.png", 
 	 { frameWidth: 350, frameHeight: 350, endFrame: 16 });	
 	
-	
-	// this.load.html('nameform', 'setup2.html');
+
 	
 	this.load.spritesheet("buttons", "./img/buttons3.jpg", 
      { frameWidth: 100, frameHeight: 50, endFrame: 3 });	
      
-     this.load.html('nameform', './html/setup.html');     
+     this.load.html('character_form', './html/character_form.html');     
 }
 
-var element;
+
 
 
 function create ()
@@ -100,51 +101,44 @@ function create ()
 
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+	//SET BOUNDS TO THE CAMERA MOVEMENT
     this.cameras.main.setBounds(
         -gameFunctions.config.cardSize, 
         -gameFunctions.config.cardSize, 
         config.width + (gameFunctions.config.cardSize * 2), 
         config.height + (gameFunctions.config.cardSize * 2));
 
-    
 
-    element = this.add.dom(this.cameras.main.centerX, y_origin).createFromCache('nameform');
-	element.setPerspective(800);
-	element.setAlpha(0)
-	element.addListener('click');
 	
-	element.on('click', function (event) {
+	//ADD THE CHARACTER SELECTION MENU
+    character_form = this.add.dom(this.cameras.main.centerX, y_origin).createFromCache('character_form');
+	character_form.setPerspective(800);
+	character_form.setAlpha(0)
+	character_form.addListener('click');
+	
+	//ADD CLICK FUNCTIONALITY TO THE CHARACTER SELECTOR
+	character_form.on('click', function (event) {
         if (event.target.name === 'start')
         {
             var character = this.getChildByName('characters');
 			console.log(character.value)
+			gameFunctions.config.game_state += 1;
 			
+			//FADE THE CHARACTER PICKER OUT THEN REMOVE
 			this.scene.tweens.add({
-			targets: element,
-			// y: this.cameras.main.centerY,
+			targets: character_form,
 			alpha: 0,
 			duration: 500,
 			ease: 'Power3',
 			onComplete: function ()
 			{
-				element.setVisible(false);
+				character_form.setVisible(false);
 			}
 			});       			
 			
 		}
-	})
+	})	
 	
-	
-	this.tweens.add({
-	targets: element,
-	// y: this.cameras.main.centerY,
-	alpha: 1,
-	duration: 500,
-	ease: 'Power3'
-	});       
-
-
-
 }
 
 function update (time, delta)
@@ -161,21 +155,37 @@ function update (time, delta)
 		case 1:
 			//GAME_STATE 1, waiting for game start
 			// gameFunctions.config.game_state += 1;
+			connFunctions.updateGameElements();					
 		break;
 		
-		
 		case 2:
+			//FADE THE CHARACTER PICKER INTO VIEW
+			gameFunctions.game.tweens.add({
+			targets: character_form,
+			// y: this.cameras.main.centerY,
+			alpha: 1,
+			duration: 500,
+			ease: 'Power3',
+			onComplete: function ()
+			{
+				character_form.setVisible(true);
+			}
+			});       			
+		break;
+		
+		case 3:
             this.input.dragDistanceThreshold = 16;			
 			
 			// gameFunctions.setupPlayers();
 			/**/
 			gameFunctions.setupButtons();
-			connFunctions.updateGameElements();			
+			// connFunctions.updateGameElements();			
 			gameFunctions.createScrollBar();			
 			// console.log("TEST")
 			gameFunctions.config.game_state += 1;
 		break;
-		case 3:
+			
+		case 4:
 			//SETUP GAME LOOP
             gameFunctions.hand = []; //RESET THE HAND
             gameFunctions.config.selected_card = -1;
@@ -201,8 +211,9 @@ function update (time, delta)
                 })	
             }
 			gameFunctions.config.game_state += 1;						
-		break;        
-		case 4:
+		break;
+			
+		case 5:
 			gameFunctions.updateHandCards();
 			
 			gameFunctions.updateCardGraphics();
