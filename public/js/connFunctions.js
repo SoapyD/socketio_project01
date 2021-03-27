@@ -3,8 +3,8 @@
 // const address = 'http://localhost:3000/admin';
 
 
-const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
-// const address = 'http://localhost:3000';
+// const address = 'https://node-v12-ubyor.run-eu-central1.goorm.io';
+const address = 'http://localhost:3000';
 const socket = io(address)
 
 $('#message-input').slideUp(0);

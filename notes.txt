@@ -1,4 +1,17 @@
 
+
+26-03-2021
+-Players still can't end their turn
+-nothing stops a player from placing more than 1 card down
+-cards aren't snapping to the hand bar anymore
+    -this only happens if the game is started by player 1 then player 2 enters.
+    -The game gets confused about who should be controlling the "snap to hand" function
+    -The snap to function isn't working on the second player screen when a card is drawn
+-When a player rejoins a room, the game setup menus needs to be skipped
+
+
+
+
 -Add in step to the socket util that checks for reconnections and automatically tries to rejoin room
 -Maybe have it that if the author gets kicked out of the room, everyone is kicked out too?
 -"request change player" doesn't do anything
