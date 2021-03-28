@@ -19,6 +19,7 @@ gameFunctions.config = {
     roomName: '',
 	roomID: '',
     playerNumber: 0,
+    maxPlayers: 0,
     currentPlayer: 0, //1
     last_card: -1,
     selected_card: -1,
@@ -31,7 +32,7 @@ gameFunctions.hand = [];
 gameFunctions.cards = [];	
 gameFunctions.btn_sprite = [];
 gameFunctions.print_sprite = [];
-
+gameFunctions.character_form;
 
 //  #####   #####  ######  ####### #       #       ######     #    ######  
 // #     # #     # #     # #     # #       #       #     #   # #   #     # 
@@ -246,6 +247,17 @@ gameFunctions.setupButtons = () => {
 // #    #  #       #     # #          #    #     # 
 // #     # #######  #####  #######    #     #####  
 
+gameFunctions.nextPlayer = () => {
+
+
+    gameFunctions.config.currentPlayer++
+    if (gameFunctions.config.currentPlayer >= gameFunctions.config.maxPlayers){
+        gameFunctions.config.currentPlayer = 0
+    }
+    gameFunctions.config.game_state = 4
+
+}
+
 
 gameFunctions.reloadGame = (room) => {
 
@@ -293,5 +305,8 @@ gameFunctions.reloadGame = (room) => {
             }
         })
     }
+
+    connFunctions.updateGameElements();	
+    gameFunctions.config.game_state = 3
 
 }

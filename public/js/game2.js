@@ -123,6 +123,7 @@ function create ()
             var character = this.getChildByName('characters');
 
             let data = {
+                roomID: gameFunctions.config.roomID,
                 playerId: gameFunctions.config.playerNumber,
                 character: character.value
             }
@@ -134,20 +135,21 @@ function create ()
         if (event.target.name === 'start')
         {        
 			//FADE THE CHARACTER PICKER OUT THEN REMOVE
-			this.scene.tweens.add({
-                targets: character_form,
-                alpha: 0,
-                duration: 500,
-                ease: 'Power3',
-                onComplete: function ()
-                {
-                    character_form.setVisible(false);
-                }
-                }); 
+			// this.scene.tweens.add({
+            //     targets: character_form,
+            //     alpha: 0,
+            //     duration: 500,
+            //     ease: 'Power3',
+            //     onComplete: function ()
+            //     {
+            //         character_form.setVisible(false);
+            //     }
+            //     }); 
             gameFunctions.config.menu_state++;
 
         }
 	})	
+    // gameFunctions.character_form = character_form
 	
 }
 
@@ -161,7 +163,8 @@ function update (time, delta)
 			gameFunctions.game = this;
 			// connFunctions.startGameCheck(socket)
 			connFunctions.updateGameElements();	
-            connFunctions.changeCharacter();	            
+            connFunctions.changeCharacter();
+            connFunctions.HideCharacterMenu();	            
 			gameFunctions.config.game_state += 1;
 		break;
 		case 1:
@@ -252,6 +255,7 @@ function preGameMenuStates() {
         
         case 2:
             // console.log(character_box.text)
+            // connFunctions.requestHideCharacterMenu();            
             connFunctions.requestAdvanceGameState();
         break;	
 

@@ -26,7 +26,7 @@ CHARACTER SELECT
 -DONE -Add in a more generic "request gamestate advance" to move the gamestate on when needed, like when the start game button is selected
 
 -When selections have been made on both sides, only player 1 can then end the selection and start the game
-
+-Need to fade the character screen on both sides as currently it doesn't
 
 
 

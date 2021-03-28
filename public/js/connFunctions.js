@@ -86,6 +86,8 @@ connFunctions.checkMessages = (socket) => {
 		gameFunctions.config.roomName = data.roomName
 		gameFunctions.config.roomID = data.roomID	
         gameFunctions.config.playerNumber = data.playerNumber
+        gameFunctions.config.maxPlayers = data.maxPlayers
+
         
         if(data.type){
             // console.log("rejoining")
@@ -128,6 +130,12 @@ connFunctions.checkMessages = (socket) => {
 		gameFunctions.createCard(data);
 	})    	    
 
+
+    socket.on('ChangePlayer', (data) => {
+        // console.log("change player!")
+		gameFunctions.nextPlayer();
+	})    	  
+
 }        
 
 connFunctions.checkMessages(socket)
@@ -157,6 +165,28 @@ connFunctions.changeCharacter = () => {
         let id = '#p'+(data.playerId+1)+'_character'
         $(id)[0].innerHTML = "Character "+data.character
 	})	
+}
+
+connFunctions.requestHideCharacterMenu = () => {
+    socket.emit('requestHideCharacterMenu')
+}
+
+connFunctions.HideCharacterMenu = () => {
+    //FADE THE CHARACTER PICKER OUT THEN REMOVE
+    console.log("hide")
+    if(gameFunctions.character_form){
+        gameFunctions.character_form.scene.tweens.add({
+            targets: gameFunctions.character_form,
+            alpha: 0,
+            duration: 500,
+            ease: 'Power3',
+            onComplete: function ()
+            {
+                gameFunctions.character_form.setVisible(false);
+            }
+            });  
+    }
+   
 }
 
 

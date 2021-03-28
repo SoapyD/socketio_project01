@@ -10,6 +10,12 @@ const roomSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User' 
     }]
+    ,characters: [{
+        id: Number
+        ,character_id: {type: Number, default: -1}
+        ,life: {type: Number, default: 0}
+        ,armour: {type: Number, default: 0}
+    }]
 
 	,author: {
 		id: {

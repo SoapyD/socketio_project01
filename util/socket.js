@@ -51,6 +51,7 @@ exports.checkMessages = (io,namespace) => {
 							userName: data.userName
 							,roomName: data.roomName
 							,roomID: room._id
+                            ,maxPlayers: room.max_players
 							,playerNumber: room.users.indexOf(data.userID)
 						}
 						socket.join(data.roomName)
@@ -91,6 +92,7 @@ exports.checkMessages = (io,namespace) => {
 									,roomName: data.roomName
 									,roomID: room._id
                                     ,playerNumber: room.users.indexOf(data.userID)
+                                    ,characterID: room.characters.indexOf(data.userID)
                                     ,room: room
                                     ,type: 'rejoining'
 								}
@@ -111,16 +113,18 @@ exports.checkMessages = (io,namespace) => {
 								,roomName: data.roomName
 								,roomID: room._id
 								,playerNumber: room.users.indexOf(data.userID)
+                                ,maxPlayers: room.max_players
 							}
 							//send room info back to socket
 							io.to(socket.id).emit('roomInfo', return_data);				
 						})
 						socket.join(data.roomName)
+
+                        if (room.users.length >= room.max_players){
+                            io.of(namespace).emit("advanceGameState", data)
+                        }                        
 					}
-					
-					if (room.users.length >= room.max_players){
-						io.of(namespace).emit("advanceGameState", data)
-					}
+
 				
 				}else{
 					// ELSE, ALLOW THE ROOM TO BE CREATED
@@ -164,9 +168,22 @@ socket.on('requestAdvanceGameState', (data) => {
 socket.on('requestChangeCharacter', (data) => {
 
     if (data.character !== ""){
-        io.of(namespace).emit("ChangeCharacter", data)
+        //SAVE CHARACTER
+        queriesUtil.findRoom(data.roomID)
+        .then((room) => {
+
+            room.characters[data.playerId].character_id = data.character
+
+            room.save(function(err, room) {
+                io.of(namespace).emit("ChangeCharacter", data)
+            })
+        })
     }
 })	
+
+socket.on('requestHideCharacterMenu', () => {
+    io.of(namespace).emit("HideCharacterMenu")
+})		
 
 
 //  #####   #####  ######  ####### #       #       ######     #    ######  
@@ -322,11 +339,10 @@ socket.on('requestChangeCharacter', (data) => {
 
 		})									
 		
-	
-		
-		// socket.on('requestChangePlayer', () => {
-		// 	io.of(namespace).emit("ChangePlayer")
-		// })			
+			
+		socket.on('requestChangePlayer', () => {
+			io.of(namespace).emit("ChangePlayer")
+		})			
 
 		// socket.on('requestCheckBoard', (data) => {
 		// 	if(data.touching === 1){ // && data.pass_check === true

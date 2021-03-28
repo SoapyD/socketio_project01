@@ -55,14 +55,25 @@ exports.createRoom = (room_data, socket_id) => {
     let decks = deckController.resetDecks();
     let boardmatrix = deckController.setupBoardMatrix(config);	
 	
+    let max_players = 1
+
+    let characters = []
+    for (let i = 0; i < max_players; i++) {
+        let character = {
+            id: i
+        }
+        characters.push(character)
+    }
+
     return Room.create ({
         roomName: room_data.roomName
         ,password: room_data.password
         ,author: author
         ,users: users
         ,sockets: sockets
+        ,characters: characters
 		
-		,max_players: 1//2
+		,max_players: max_players
 		,config: config
         ,decks: decks
         ,matrix: boardmatrix
