@@ -37,22 +37,44 @@
 		.box {
 			width: 400px;
 		}
-		
+
+        .rect{
+            float:left;
+            height: 200px; /* or whatever you want */
+            position:relative;
+            width: 50%; /* or whatever you want */
+            background-color: white;
+            border: black 1px solid;
+            /* align-items: center; */
+
+            line-height: 200px;
+            text-align: center;
+        }
+
 	</style>
 
 	
 	<div class="box">
 		
+        <div class="rect" id="p1_character"></div>
+        <div class="rect" id="p2_character"></div>
+
+
 		<select name="characters" id="character-select">
 			<option value="">--Please choose an option--</option>
 			<option value="1">Character 1</option>
 			<option value="2">Character 2</option>
+            <option value="3">Character 3</option>
+            <option value="4">Character 4</option>
+            <option value="5">Character 5</option>
 		</select>		
 		
 		
 		<div class="btn-group">
-			<input name="start" class="btn btn-primary" type="submit">
+			<input id="select-character" name="select" class="btn btn-primary" type="submit" value="Select Character">
 			</input>
+			<input name="start" class="btn btn-primary" type="submit" value="Start Game">
+			</input>            
 		</div>
 	
 		</ul> 		

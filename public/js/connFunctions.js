@@ -65,6 +65,16 @@ connFunctions.checkMessages = (socket) => {
         sendMessage(event)         
     })   
 
+
+    // $(document).on('click', '#select-character', (event) => {
+    //     let data = {
+    //         player
+    //     }   
+    //     socket.emit('MessageToServer', data)      
+    // })   
+
+
+
     $(document).on('keypress', (event) => {
         if(event.which == 13) {
             console.log("test")
@@ -88,7 +98,6 @@ connFunctions.checkMessages = (socket) => {
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
         $('#message-form').slideToggle(1000);
         $('#message-input').slideDown(1000);
-        // gameFunctions.config.game_state += 1;
     })
 
     socket.on('roomMessage', (data) => {
@@ -96,12 +105,9 @@ connFunctions.checkMessages = (socket) => {
         messages.insertAdjacentHTML("beforeend", "<li>'"+data.userName+"' has been added as Player #"+data.playerNumber+" to room '"+data.roomName+"'</li>");		        
     })
 
-    socket.on('startGame', (data) => {
+    socket.on('advanceGameState', (data) => {
         
-        // if(data.usersNumber === 1)
-        // {
-        //     $('#start-button').removeClass('hidden');
-        // }
+        gameFunctions.config.menu_state = 0;
 		gameFunctions.config.game_state += 1;
     })	
 
@@ -127,6 +133,31 @@ connFunctions.checkMessages = (socket) => {
 connFunctions.checkMessages(socket)
 
 
+
+// ######  ######  #######        #####     #    #     # #######       #     # ####### #     # #     #  #####  
+// #     # #     # #             #     #   # #   ##   ## #             ##   ## #       ##    # #     # #     # 
+// #     # #     # #             #        #   #  # # # # #             # # # # #       # #   # #     # #       
+// ######  ######  #####   ##### #  #### #     # #  #  # #####   ##### #  #  # #####   #  #  # #     #  #####  
+// #       #   #   #             #     # ####### #     # #             #     # #       #   # # #     #       # 
+// #       #    #  #             #     # #     # #     # #             #     # #       #    ## #     # #     # 
+// #       #     # #######        #####  #     # #     # #######       #     # ####### #     #  #####   #####  
+
+connFunctions.requestAdvanceGameState = (data) => {
+    socket.emit('requestAdvanceGameState', data)
+}
+
+connFunctions.requestChangeCharacter = (data) => {
+    socket.emit('requestChangeCharacter', data)
+}
+
+connFunctions.changeCharacter = () => {
+	socket.on('ChangeCharacter', (data) => {
+        
+        //CHANGE THE HTML CONTENT OF THE PLAYER BUTTON
+        let id = '#p'+(data.playerId+1)+'_character'
+        $(id)[0].innerHTML = "Character "+data.character
+	})	
+}
 
 
 //  #####   #####  ######  ####### #       #       ######     #    ######  

@@ -118,25 +118,35 @@ function create ()
 	
 	//ADD CLICK FUNCTIONALITY TO THE CHARACTER SELECTOR
 	character_form.on('click', function (event) {
-        if (event.target.name === 'start')
+        if (event.target.name === 'select')
         {
             var character = this.getChildByName('characters');
-			console.log(character.value)
-			gameFunctions.config.game_state += 1;
-			
+
+            let data = {
+                playerId: gameFunctions.config.playerNumber,
+                character: character.value
+            }
+      			
+            connFunctions.requestChangeCharacter(data)
+        
+		}
+
+        if (event.target.name === 'start')
+        {        
 			//FADE THE CHARACTER PICKER OUT THEN REMOVE
 			this.scene.tweens.add({
-			targets: character_form,
-			alpha: 0,
-			duration: 500,
-			ease: 'Power3',
-			onComplete: function ()
-			{
-				character_form.setVisible(false);
-			}
-			});       			
-			
-		}
+                targets: character_form,
+                alpha: 0,
+                duration: 500,
+                ease: 'Power3',
+                onComplete: function ()
+                {
+                    character_form.setVisible(false);
+                }
+                }); 
+            gameFunctions.config.menu_state++;
+
+        }
 	})	
 	
 }
@@ -150,27 +160,18 @@ function update (time, delta)
 		case 0:
 			gameFunctions.game = this;
 			// connFunctions.startGameCheck(socket)
+			connFunctions.updateGameElements();	
+            connFunctions.changeCharacter();	            
 			gameFunctions.config.game_state += 1;
 		break;
 		case 1:
 			//GAME_STATE 1, waiting for game start
-			// gameFunctions.config.game_state += 1;
-			connFunctions.updateGameElements();					
+			// gameFunctions.config.game_state += 1;				
 		break;
 		
 		case 2:
-			//FADE THE CHARACTER PICKER INTO VIEW
-			gameFunctions.game.tweens.add({
-			targets: character_form,
-			// y: this.cameras.main.centerY,
-			alpha: 1,
-			duration: 500,
-			ease: 'Power3',
-			onComplete: function ()
-			{
-				character_form.setVisible(true);
-			}
-			});       			
+            //PRE-GAME MENU STATES
+            preGameMenuStates()
 		break;
 		
 		case 3:
@@ -222,4 +223,39 @@ function update (time, delta)
 		// code block
 	}	
 				
+}
+
+
+
+function preGameMenuStates() {
+	// console.log("loop")
+	switch( gameFunctions.config.menu_state) {
+		case 0:
+			//FADE THE CHARACTER PICKER INTO VIEW
+			gameFunctions.game.tweens.add({
+                targets: character_form,
+                // y: this.cameras.main.centerY,
+                alpha: 1,
+                duration: 500,
+                ease: 'Power3',
+                onComplete: function ()
+                {
+                    character_form.setVisible(true);
+                }
+                });    
+
+            gameFunctions.config.menu_state++;
+        break;		
+        case 1:
+            //WAIT FOR PLAYERS TO SELECT CHARACTER AND TO START GAME 
+        break;	
+        
+        case 2:
+            // console.log(character_box.text)
+            connFunctions.requestAdvanceGameState();
+        break;	
+
+        default:
+        // code block
+    }	               
 }

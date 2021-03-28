@@ -58,7 +58,7 @@ exports.checkMessages = (io,namespace) => {
 						io.to(socket.id).emit('roomInfo', return_data);
 
 						if (room.users.length >= room.max_players){
-							io.of(namespace).emit("startGame", data)
+							io.of(namespace).emit("advanceGameState", data)
 						}						
 						
 					})
@@ -119,7 +119,7 @@ exports.checkMessages = (io,namespace) => {
 					}
 					
 					if (room.users.length >= room.max_players){
-						io.of(namespace).emit("startGame", data)
+						io.of(namespace).emit("advanceGameState", data)
 					}
 				
 				}else{
@@ -148,6 +148,25 @@ exports.checkMessages = (io,namespace) => {
 				}
 			});
 		})		
+
+// ######  ######  #######        #####     #    #     # #######       #     # ####### #     # #     #  #####  
+// #     # #     # #             #     #   # #   ##   ## #             ##   ## #       ##    # #     # #     # 
+// #     # #     # #             #        #   #  # # # # #             # # # # #       # #   # #     # #       
+// ######  ######  #####   ##### #  #### #     # #  #  # #####   ##### #  #  # #####   #  #  # #     #  #####  
+// #       #   #   #             #     # ####### #     # #             #     # #       #   # # #     #       # 
+// #       #    #  #             #     # #     # #     # #             #     # #       #    ## #     # #     # 
+// #       #     # #######        #####  #     # #     # #######       #     # ####### #     #  #####   #####  
+
+socket.on('requestAdvanceGameState', (data) => {
+    io.of(namespace).emit("advanceGameState", data)
+})		
+
+socket.on('requestChangeCharacter', (data) => {
+
+    if (data.character !== ""){
+        io.of(namespace).emit("ChangeCharacter", data)
+    }
+})	
 
 
 //  #####   #####  ######  ####### #       #       ######     #    ######  

@@ -22,8 +22,9 @@ CHARACTER SELECT
 //////////////////////////////////////////////////////////////////////
 -DONE -Got the menu selection screen to appear which was a long standing problem
 -DONE -modify the code so the character menu pops up in the regular game loop
+-DONE -Make the selection update via sockets so both players can see who the other has selected
+-DONE -Add in a more generic "request gamestate advance" to move the gamestate on when needed, like when the start game button is selected
 
--Make the selection update via sockets so both players can see who the other has selected
 -When selections have been made on both sides, only player 1 can then end the selection and start the game
 
 

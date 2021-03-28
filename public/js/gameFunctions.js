@@ -15,6 +15,7 @@ gameFunctions.config = {
     depth_card_held: 30,
     
     game_state: 0,
+    menu_state: 0,    
     roomName: '',
 	roomID: '',
     playerNumber: 0,
