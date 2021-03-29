@@ -1,13 +1,13 @@
 
 
 26-03-2021
--Players still can't end their turn
+-DONE -Players still can't end their turn
 -nothing stops a player from placing more than 1 card down
 -cards aren't snapping to the hand bar anymore
     -this only happens if the game is started by player 1 then player 2 enters.
     -The game gets confused about who should be controlling the "snap to hand" function
     -The snap to function isn't working on the second player screen when a card is drawn
--When a player rejoins a room, the game setup menus needs to be skipped
+-DONE -When a player rejoins a room, the game setup menus needs to be skipped
 
 
 
@@ -24,9 +24,10 @@ CHARACTER SELECT
 -DONE -modify the code so the character menu pops up in the regular game loop
 -DONE -Make the selection update via sockets so both players can see who the other has selected
 -DONE -Add in a more generic "request gamestate advance" to move the gamestate on when needed, like when the start game button is selected
+-DONE -Need to fade the character screen on both sides as currently it doesn't
+
 
 -When selections have been made on both sides, only player 1 can then end the selection and start the game
--Need to fade the character screen on both sides as currently it doesn't
 
 
 

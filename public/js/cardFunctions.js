@@ -120,7 +120,7 @@ gameFunctions.createCard = (data) => {
 		card.setFrame(gameFunctions.config.card_back);
 	}
 		
-    card.displayWidth = gameFunctions.config.cardSize;
+    card.displayWidth = gameFunctions.config.handCardSize;
     card.scaleY = card.scaleX;	
 	card.orientation = 0;
 	card.x_table_pos = -1;
@@ -174,6 +174,9 @@ gameFunctions.updateHandCards = () => {
             card.angle = 0;
             card.depth = gameFunctions.config.depth_card_hand;
     
+            card.displayWidth = gameFunctions.config.handCardSize;
+            card.scaleY = card.scaleX;	
+
             card.x = gameFunctions.scrollBar.x + (gameFunctions.config.handCardSize / 2) + (gameFunctions.config.handCardSize * i);
             card.y = gameFunctions.scrollBar.y;
             

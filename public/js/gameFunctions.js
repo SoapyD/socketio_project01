@@ -2,9 +2,12 @@
 gameFunctions = []
 
 gameFunctions.config = {
+    // cardSize: 150,
+    // handCardSize: 200,
+    // largeCardSize: 225,
     cardSize: 100,
     handCardSize: 150,
-    largeCardSize: 200,
+    largeCardSize: 200,    
     tableWidth: 7, //7
     tableHeight: 5, //5
     card_back: 15,	

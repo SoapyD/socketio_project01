@@ -173,20 +173,21 @@ connFunctions.requestHideCharacterMenu = () => {
 
 connFunctions.HideCharacterMenu = () => {
     //FADE THE CHARACTER PICKER OUT THEN REMOVE
-    console.log("hide")
-    if(gameFunctions.character_form){
-        gameFunctions.character_form.scene.tweens.add({
-            targets: gameFunctions.character_form,
-            alpha: 0,
-            duration: 500,
-            ease: 'Power3',
-            onComplete: function ()
-            {
-                gameFunctions.character_form.setVisible(false);
-            }
+    socket.on('HideCharacterMenu', (data) => {
+
+        if(gameFunctions.character_form){
+            gameFunctions.character_form.scene.tweens.add({
+                targets: gameFunctions.character_form,
+                alpha: 0,
+                duration: 500,
+                ease: 'Power3',
+                onComplete: function ()
+                {
+                    gameFunctions.character_form.setVisible(false);
+                }
             });  
-    }
-   
+        }
+    })
 }
 
 

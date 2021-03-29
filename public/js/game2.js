@@ -2,8 +2,8 @@
 
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-	height: 600,
+    width: gameFunctions.config.cardSize * gameFunctions.config.tableWidth, //800,
+	height: gameFunctions.config.cardSize * gameFunctions.config.tableHeight, //600,
 	// width: window.innerWidth,
 	// height: window.innerHeight,	
     physics: {
@@ -72,7 +72,13 @@ function preload ()
 function create ()
 {
 	this.input.mouse.disableContextMenu();
-	
+
+    // this.cameras.main.zoom = 2;
+    // this.input.on('wheel', function (pointer, gameObjects, deltaX, deltaY, deltaZ) {
+        // gameFunctions.game.cameras.main.zoom += deltaX * 0.5;
+    // });	
+
+
 	let x_origin = this.cameras.main.centerX	
 	let y_origin = this.cameras.main.centerY	
 
@@ -149,7 +155,7 @@ function create ()
 
         }
 	})	
-    // gameFunctions.character_form = character_form
+    gameFunctions.character_form = character_form
 	
 }
 
@@ -255,7 +261,7 @@ function preGameMenuStates() {
         
         case 2:
             // console.log(character_box.text)
-            // connFunctions.requestHideCharacterMenu();            
+            connFunctions.requestHideCharacterMenu();            
             connFunctions.requestAdvanceGameState();
         break;	
 

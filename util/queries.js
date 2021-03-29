@@ -29,6 +29,9 @@ exports.createRoom = (room_data, socket_id) => {
 
 	
 	let config = {
+		// cardSize: 150
+		// ,handCardSize: 200
+		// ,largeCardSize: 225        
 		cardSize: 100
 		,handCardSize: 150
 		,largeCardSize: 200
