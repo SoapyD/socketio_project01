@@ -3,11 +3,14 @@ gameFunctions.createCard = (data) => {
 	// let game = gameFunctions.game;
     //LOAD A CARD SPRITE AND RESCALE IT
 
-    let card = gameFunctions.game.add.sprite(gameFunctions.game.cameras.main.centerX, gameFunctions.game.cameras.main.centerY, data.card_type).setInteractive();
+    // let parent = gameFunctions.game
+    let parent = gameFunctions.UI_scene
+
+    let card = parent.add.sprite(parent.cameras.main.centerX, parent.cameras.main.centerY, data.card_type).setInteractive();
 	
 
 	//WHEN THE CARD IS DRAGGED, SEND IT OVER THE SOCKET SO IT UPDATES FOR EVERYONE
-    gameFunctions.game.input.on('drag', function (pointer, gameObject, dragX, dragY) {
+    parent.input.on('drag', function (pointer, gameObject, dragX, dragY) {
 		if(gameObject.type === "card"){			
 			if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
 			{                
@@ -93,7 +96,7 @@ gameFunctions.createCard = (data) => {
         {
             // if (card.placed === false && card.held === false){
 			if (card.held === false){
-                gameFunctions.game.tweens.add({
+                parent.tweens.add({
                     targets: gameFunctions.scrollBar,
                     y: gameFunctions.config.yPosUp,
                     duration: 500,
@@ -136,11 +139,11 @@ gameFunctions.createCard = (data) => {
 	
 	
 	//SET CARD AS DRAGGABLE AND GIVE IT AN ID
-    gameFunctions.game.input.setDraggable(card);
+    parent.input.setDraggable(card);
     card.id = gameFunctions.cards.length;	
 	
 	
-	card.graphic = gameFunctions.game.add.graphics({
+	card.graphic = parent.add.graphics({
 	x: card.x - card.width / 2,
 	y: card.y - card.height / 2
 	})

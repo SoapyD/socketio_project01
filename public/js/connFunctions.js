@@ -302,6 +302,10 @@ connFunctions.updateCards = (socket) => {
 			}
 			card.depth = gameFunctions.config.depth_card_table;
 			gameFunctions.config.selected_card = data.cards_array_id;
+
+            // console.log("CHANGE SCENE")
+            // card.scene.sys.scenePlugin.switch(gameFunctions.game);
+            // card.scene.add(gameFunctions.game)
         })		
 		
 		socket.on('PalmCard', (data) => {

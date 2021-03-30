@@ -47,11 +47,13 @@ gameFunctions.character_form;
 
 gameFunctions.createScrollBar = () => {
 	
+    let parent = gameFunctions.UI_scene;
+
 	let cardNumber = 12;
-	gameFunctions.config.yPosUp = gameFunctions.game.cameras.main.centerY + (config.height / 2) - (gameFunctions.config.handCardSize / 2);
-	gameFunctions.config.yPosDown = gameFunctions.game.cameras.main.centerY + (config.height / 2);// + (gameFunctions.config.handCardSize / 4);	
+	gameFunctions.config.yPosUp = parent.cameras.main.centerY + (config.height / 2) - (gameFunctions.config.handCardSize / 2);
+	gameFunctions.config.yPosDown = parent.cameras.main.centerY + (config.height / 2);// + (gameFunctions.config.handCardSize / 4);	
 	
-	let scrollBar = gameFunctions.game.add.grid(
+	let scrollBar = parent.add.grid(
 		// gameFunctions.game.cameras.main.centerX,
 		0, gameFunctions.config.yPosDown, 
 		gameFunctions.config.handCardSize * cardNumber,
@@ -65,9 +67,9 @@ gameFunctions.createScrollBar = () => {
 	scrollBar.setOrigin(0,0.5);
 	scrollBar.setScrollFactor(0); //make buttons non-scrollable
 	
-    gameFunctions.game.input.setDraggable(scrollBar);	
+    parent.input.setDraggable(scrollBar);	
 	
-    gameFunctions.game.input.on('drag', function (pointer, gameObject, dragX, dragY) {
+    parent.input.on('drag', function (pointer, gameObject, dragX, dragY) {
 		if (gameObject.type === "scrollbar"){			
 			let x = dragX;
 			let max_x = 0
@@ -96,7 +98,7 @@ gameFunctions.createScrollBar = () => {
 	scrollBar.on('pointerover', function (pointer) {
         if (gameFunctions.config.playerNumber === gameFunctions.config.currentPlayer)
         {
-            gameFunctions.game.tweens.add({
+            parent.tweens.add({
                 targets: scrollBar,
                 y: gameFunctions.config.yPosUp,
                 duration: 500,
@@ -107,7 +109,7 @@ gameFunctions.createScrollBar = () => {
 	
 	scrollBar.on('pointerout', function (pointer) {
 
-		gameFunctions.game.tweens.add({
+		parent.tweens.add({
 			targets: scrollBar,
 			y: gameFunctions.config.yPosDown,
 			duration: 500,
@@ -189,8 +191,8 @@ gameFunctions.buttonPress = (sprite, callback, callbackParams) => {
 gameFunctions.setupButtons = () => {
 
 	let callbackParams = {};
-	gameFunctions.createButton(gameFunctions.game, 50, gameFunctions.game.cameras.main.centerY - 25, "lock card", connFunctions.requestLockCard, callbackParams, gameFunctions.btn_sprite);			
-	gameFunctions.createButton(gameFunctions.game, 50, gameFunctions.game.cameras.main.centerY + 25, "end turn", connFunctions.requestChangePlayer, callbackParams, gameFunctions.btn_sprite);
+	gameFunctions.createButton(gameFunctions.UI_scene, 50, gameFunctions.game.cameras.main.centerY - 25, "lock card", connFunctions.requestLockCard, callbackParams, gameFunctions.btn_sprite);			
+	gameFunctions.createButton(gameFunctions.UI_scene, 50, gameFunctions.game.cameras.main.centerY + 25, "end turn", connFunctions.requestChangePlayer, callbackParams, gameFunctions.btn_sprite);
 	
 	
 	// let far_left = gameFunctions.tableWidth * gameFunctions.cardSize;
@@ -202,7 +204,7 @@ gameFunctions.setupButtons = () => {
 		deck_id: 0,
 		card_type: "a2"	
 	}
-	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY - 100, "armour", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
+	gameFunctions.createButton(gameFunctions.UI_scene, far_right- 50, gameFunctions.game.cameras.main.centerY - 100, "armour", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
 	
 	callbackParams = {
 		// roomName: gameFunctions.config.roomName,				
@@ -210,7 +212,7 @@ gameFunctions.setupButtons = () => {
 		deck_id: 1,
 		card_type: "s2"	
 	}			
-	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY - 50, "speed", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
+	gameFunctions.createButton(gameFunctions.UI_scene, far_right- 50, gameFunctions.game.cameras.main.centerY - 50, "speed", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
 	
 	callbackParams = {
 		// roomName: gameFunctions.config.roomName,				
@@ -218,7 +220,7 @@ gameFunctions.setupButtons = () => {
 		deck_id: 2,
 		card_type: "p2"	
 	}			
-	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY, "physical", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
+	gameFunctions.createButton(gameFunctions.UI_scene, far_right- 50, gameFunctions.game.cameras.main.centerY, "physical", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);
 	
 	callbackParams = {
 		// roomName: gameFunctions.config.roomName,				
@@ -226,7 +228,7 @@ gameFunctions.setupButtons = () => {
 		deck_id: 3,
 		card_type: "f2"	
 	}			
-	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY + 50, "focus", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
+	gameFunctions.createButton(gameFunctions.UI_scene, far_right- 50, gameFunctions.game.cameras.main.centerY + 50, "focus", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
 	
 	callbackParams = {
 		// roomName: gameFunctions.config.roomName,				
@@ -234,7 +236,7 @@ gameFunctions.setupButtons = () => {
 		deck_id: 4,
 		card_type: "c2"	
 	}			
-	gameFunctions.createButton(gameFunctions.game, far_right- 50, gameFunctions.game.cameras.main.centerY + 100, "cheat", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
+	gameFunctions.createButton(gameFunctions.UI_scene, far_right- 50, gameFunctions.game.cameras.main.centerY + 100, "cheat", connFunctions.requestCreateCard, callbackParams, gameFunctions.btn_sprite);			
 	
 	gameFunctions.btn_sprite.forEach(btn => {
 		gameFunctions.buttonPress(btn, btn.clickAction, btn.callbackParams);                    

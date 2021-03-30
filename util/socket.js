@@ -79,52 +79,59 @@ exports.checkMessages = (io,namespace) => {
 				if (rooms.length > 0){
 					let room = rooms[0];
 
-					if(room.users.indexOf(data.userID) > -1){
-						if(room.sockets.indexOf(socket.id) > -1){
-							io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
-						}else{
-							io.to(socket.id).emit('MessageFromServer', "Rejoining room");														
-							room.sockets.push(socket.id);
+                    if(room.password !== data.password)
+                    {
+                        io.to(socket.id).emit('MessageFromServer', "Wrong password! Please try again");
+                    }
+                    else{
 
-							room.save(function(err, room) {
-								let return_data = {
-									userName: data.userName
-									,roomName: data.roomName
-									,roomID: room._id
+                        if(room.users.indexOf(data.userID) > -1){
+                            if(room.sockets.indexOf(socket.id) > -1){
+                                io.to(socket.id).emit('MessageFromServer', "You're already in this room");							
+                            }else{
+                                io.to(socket.id).emit('MessageFromServer', "Rejoining room");														
+                                room.sockets.push(socket.id);
+    
+                                room.save(function(err, room) {
+                                    let return_data = {
+                                        userName: data.userName
+                                        ,roomName: data.roomName
+                                        ,roomID: room._id
+                                        ,playerNumber: room.users.indexOf(data.userID)
+                                        ,characterID: room.characters.indexOf(data.userID)
+                                        ,room: room
+                                        ,type: 'rejoining'
+                                    }
+                                    //send room info back to socket
+                                    io.to(socket.id).emit('roomInfo', return_data);				
+                                })
+                                socket.join(data.roomName)							
+                            }
+                        }
+                        else{					
+                            //ADD USER TO ROOM THEN RETURN DATA
+                            room.users.push(data.userID);
+                            room.sockets.push(socket.id);
+    
+                            room.save(function(err, room) {
+                                let return_data = {
+                                    userName: data.userName
+                                    ,roomName: data.roomName
+                                    ,roomID: room._id
                                     ,playerNumber: room.users.indexOf(data.userID)
-                                    ,characterID: room.characters.indexOf(data.userID)
-                                    ,room: room
-                                    ,type: 'rejoining'
-								}
-								//send room info back to socket
-								io.to(socket.id).emit('roomInfo', return_data);				
-							})
-							socket.join(data.roomName)							
-						}
-					}
-					else{					
-						//ADD USER TO ROOM THEN RETURN DATA
-						room.users.push(data.userID);
-						room.sockets.push(socket.id);
+                                    ,maxPlayers: room.max_players
+                                }
+                                //send room info back to socket
+                                io.to(socket.id).emit('roomInfo', return_data);				
+                            })
+                            socket.join(data.roomName)
+    
+                            if (room.users.length >= room.max_players){
+                                io.of(namespace).emit("advanceGameState", data)
+                            }                        
+                        }
 
-						room.save(function(err, room) {
-							let return_data = {
-								userName: data.userName
-								,roomName: data.roomName
-								,roomID: room._id
-								,playerNumber: room.users.indexOf(data.userID)
-                                ,maxPlayers: room.max_players
-							}
-							//send room info back to socket
-							io.to(socket.id).emit('roomInfo', return_data);				
-						})
-						socket.join(data.roomName)
-
-                        if (room.users.length >= room.max_players){
-                            io.of(namespace).emit("advanceGameState", data)
-                        }                        
-					}
-
+                    }
 				
 				}else{
 					// ELSE, ALLOW THE ROOM TO BE CREATED

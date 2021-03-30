@@ -20,13 +20,6 @@
 
 CHARACTER SELECT
 //////////////////////////////////////////////////////////////////////
--DONE -Got the menu selection screen to appear which was a long standing problem
--DONE -modify the code so the character menu pops up in the regular game loop
--DONE -Make the selection update via sockets so both players can see who the other has selected
--DONE -Add in a more generic "request gamestate advance" to move the gamestate on when needed, like when the start game button is selected
--DONE -Need to fade the character screen on both sides as currently it doesn't
-
-
 -When selections have been made on both sides, only player 1 can then end the selection and start the game
 
 
@@ -43,9 +36,6 @@ DECK
 
 RELOAD
 //////////////////////////////////////////////////////////////////////
--DONE -Fix the "last card" not flashing when the game is rejoined
--DONE -Load card angle, orientation, position and load status
-
 -load current player, live and armour totals
 
 
@@ -56,42 +46,31 @@ TWEENS
 
 DATABASE
 //////////////////////////////////////////////////////////////////////
--Save game info (like lives) to DB
+
 
 
 CLIENT
 //////////////////////////////////////////////////////////////////////
 -Upgrade version of bootstrap to v5
--
+
 
 
 
 ROOM PROCESS
 //////////////////////////////////////////////////////////////////////
--when a player attempts to create a room:
-    -Check to see if the room exists already
-        -If the room belongs to the user
-            -if the users socket belongs to the room, say they're already in it
-            -else, say the room exists, the user just needs to rejoin room
-        -Else send message to say "room name in use, choose another"
 
--when a player leaves the room:
-    -Remove them from the socket list
 
 
 
 BUGS
 //////////////////////////////////////////////////////////////////////
 
--Setting a password on a room doesn't have any effect at the moment
 -There's no current way of limiting the number of players in the room
--When a player rejoins a room, it doesn't reload any of the assets that've already been placed in said room. Need to keep track of them
 -Palming "max height" check doesn't work. Won't allow cards to be placed in bottom 2 rows of grid
 -picking up card from scrollbar always ends up making the center point move upwards, making the card annoying to place
 
 
--Seems that when there's a second player added in this setup the drawn card doesn't snap into the hand bar on player 1's screen but does on the non-current player 2 screen.
-	-There's a lot of oddities here as now the second player, when it joins room 1, doesn't have the ui generate
+
 
 	
 
@@ -102,6 +81,32 @@ DONE
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+-DONE -Save game info (like lives) to DB
+
+-DONE -Setting a password on a room doesn't have any effect at the moment
+-DONE -When a player rejoins a room, it doesn't reload any of the assets that've already been placed in said room. Need to keep track of them
+-DONE -Seems that when there's a second player added in this setup the drawn card doesn't snap into the hand bar on player 1's screen but does on the non-current player 2 screen.
+	-There's a lot of oddities here as now the second player, when it joins room 1, doesn't have the ui generate
+
+-DONE -Got the menu selection screen to appear which was a long standing problem
+-DONE -modify the code so the character menu pops up in the regular game loop
+-DONE -Make the selection update via sockets so both players can see who the other has selected
+-DONE -Add in a more generic "request gamestate advance" to move the gamestate on when needed, like when the start game button is selected
+-DONE -Need to fade the character screen on both sides as currently it doesn't
+
+-DONE -Fix the "last card" not flashing when the game is rejoined
+-DONE -Load card angle, orientation, position and load status
+
+-DONE -when a player attempts to create a room:
+    -Check to see if the room exists already
+        -If the room belongs to the user
+            -if the users socket belongs to the room, say they're already in it
+            -else, say the room exists, the user just needs to rejoin room
+        -Else send message to say "room name in use, choose another"
+
+-DONE -when a player leaves the room:
+    -Remove them from the socket list
+
 
 -DONE -Have the rotate function calculate on the server and save the orientation onto the card list there
 
